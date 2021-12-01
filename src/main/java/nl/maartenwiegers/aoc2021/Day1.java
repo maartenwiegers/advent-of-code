@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @Slf4j
@@ -18,14 +16,22 @@ public class Day1 {
 
     private static final String INPUT_FILE_NAME = "input/01-01.txt";
 
+    @SneakyThrows
+    private static List<Integer> getInput() {
+        return Files.readAllLines(FileService.getPath(INPUT_FILE_NAME))
+                .stream()
+                .map(Integer::valueOf)
+                .toList();
+    }
+
     @GetMapping("day1/part1")
     @SneakyThrows
     public int getCountMeasurementsHigherThanPrevious() {
         AtomicInteger measurementsHigherThanPrevious = new AtomicInteger();
         AtomicInteger previous = new AtomicInteger();
-        Stream<String> inputFileStream = Files.lines(FileService.getPath(INPUT_FILE_NAME));
-        inputFileStream.forEach(line -> {
-            int current = Integer.parseInt(line);
+        List<Integer> measurements = getInput();
+        measurements.forEach(measurement -> {
+            int current = measurement;
             if (current > previous.get()) {
                 measurementsHigherThanPrevious.getAndIncrement();
             }
@@ -39,7 +45,7 @@ public class Day1 {
     public int getCountSumsHigherThanPrevious() {
         AtomicInteger measurementsHigherThanPrevious = new AtomicInteger();
         AtomicInteger previous = new AtomicInteger();
-        List<Integer> measurements = Files.lines(FileService.getPath(INPUT_FILE_NAME)).map(Integer::valueOf).toList();
+        List<Integer> measurements = getInput();
         for (int i = 0; i < measurements.size() - 2; i++) {
             int sum = measurements.get(i) + measurements.get(i + 1) + measurements.get(i + 2);
             if (sum > previous.get()) {
