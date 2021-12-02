@@ -1,7 +1,6 @@
 package nl.maartenwiegers.aoc2021;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc2021.commons.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
-@Slf4j
 public class Day1 {
 
     private static final String INPUT_FILE_NAME = "input/01-01.txt";
