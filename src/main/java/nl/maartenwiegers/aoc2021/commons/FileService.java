@@ -2,7 +2,6 @@ package nl.maartenwiegers.aoc2021.commons;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -15,7 +14,7 @@ import java.util.Objects;
 public class FileService {
 
     @SneakyThrows
-    public static Path getPath(@NotNull String filename) {
+    public static Path getPath(@NonNull String filename) {
         return Paths.get(Objects.requireNonNull(FileService.class.getClassLoader().getResource(filename)).toURI());
     }
 
@@ -27,7 +26,7 @@ public class FileService {
     }
 
     @SneakyThrows
-    public static List<Integer> getInputAsListInteger(@NotNull String filename) {
+    public static List<Integer> getInputAsListInteger(@NonNull String filename) {
         return Files.readAllLines(FileService.getPath(filename))
                 .stream()
                 .map(Integer::valueOf)
