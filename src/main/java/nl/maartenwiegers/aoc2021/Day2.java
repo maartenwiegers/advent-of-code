@@ -16,20 +16,6 @@ public class Day2 {
 
     private static final String INPUT_FILE_NAME = "input/02.txt";
 
-    private static String getDirection(String movement) {
-        return StringUtils.split(movement, " ")[0];
-    }
-
-    private static int getDistance(String movement) {
-        return Integer.parseInt(StringUtils.split(movement, " ")[1]);
-    }
-
-    private static List<Movement> getMovements() {
-        List<Movement> movements = new ArrayList<>();
-        FileService.getInputAsListString(INPUT_FILE_NAME).forEach(movement -> movements.add(new Movement(getDirection(movement), getDistance(movement))));
-        return movements;
-    }
-
     @GetMapping("day2/part1")
     public int getMultiplicationOfFinalHorizontalPositionAndDepth() {
         AtomicInteger currentHorizontalPosition = new AtomicInteger();
@@ -67,6 +53,20 @@ public class Day2 {
             log.warn("currentAim: {}", currentAim.get());
         });
         return currentDepth.get() * currentHorizontalPosition.get();
+    }
+
+    private List<Movement> getMovements() {
+        List<Movement> movements = new ArrayList<>();
+        FileService.getInputAsListString(INPUT_FILE_NAME).forEach(movement -> movements.add(new Movement(getDirection(movement), getDistance(movement))));
+        return movements;
+    }
+
+    private String getDirection(String movement) {
+        return StringUtils.split(movement, " ")[0];
+    }
+
+    private int getDistance(String movement) {
+        return Integer.parseInt(StringUtils.split(movement, " ")[1]);
     }
 
     private record Movement(String direction, int distanceOrAim) {
