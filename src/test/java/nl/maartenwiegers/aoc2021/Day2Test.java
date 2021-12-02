@@ -12,4 +12,9 @@ public class Day2Test {
     public void shouldFindCorrectAnswerForDay2Part1() {
         assertEquals(1938402, day2.getMultiplicationOfFinalHorizontalPositionAndDepth());
     }
+
+    @Test
+    public void shouldFindCorrectAnswerForDay2Part2() {
+        assertEquals(1947878632, day2.getMultiplicationOfFinalHorizontalPositionAndDepthCalculatedWithAim());
+    }
 }

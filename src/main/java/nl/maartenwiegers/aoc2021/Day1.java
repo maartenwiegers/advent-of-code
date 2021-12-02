@@ -5,7 +5,6 @@ import nl.maartenwiegers.aoc2021.commons.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.file.Files;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -14,20 +13,12 @@ public class Day1 {
 
     private static final String INPUT_FILE_NAME = "input/01-01.txt";
 
-    @SneakyThrows
-    private static List<Integer> getInput() {
-        return Files.readAllLines(FileService.getPath(INPUT_FILE_NAME))
-                .stream()
-                .map(Integer::valueOf)
-                .toList();
-    }
-
     @GetMapping("day1/part1")
     @SneakyThrows
     public int getCountMeasurementsHigherThanPrevious() {
         AtomicInteger measurementsHigherThanPrevious = new AtomicInteger();
         AtomicInteger previous = new AtomicInteger();
-        List<Integer> measurements = getInput();
+        List<Integer> measurements = FileService.getInputAsListInteger(INPUT_FILE_NAME);
         measurements.forEach(measurement -> {
             int current = measurement;
             if (current > previous.get()) {
@@ -43,7 +34,7 @@ public class Day1 {
     public int getCountSumsHigherThanPrevious() {
         AtomicInteger measurementsHigherThanPrevious = new AtomicInteger();
         AtomicInteger previous = new AtomicInteger();
-        List<Integer> measurements = getInput();
+        List<Integer> measurements = FileService.getInputAsListInteger(INPUT_FILE_NAME);
         for (int i = 0; i < measurements.size() - 2; i++) {
             int sum = measurements.get(i) + measurements.get(i + 1) + measurements.get(i + 2);
             if (sum > previous.get()) {
