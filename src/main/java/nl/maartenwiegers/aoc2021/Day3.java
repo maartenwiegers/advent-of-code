@@ -5,6 +5,9 @@ import nl.maartenwiegers.aoc2021.commons.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @Slf4j
 public class Day3 {
@@ -16,15 +19,17 @@ public class Day3 {
     @GetMapping("day3/part1")
     public int getPowerConsumption() {
         FileService.getInputAsListString(INPUT_FILE_NAME).forEach(this::countCharacters);
-        String gammaRateBinary = getGammaBinaryRepresentation();
-        String epsilonRateBinary = getEpsilonBinaryRepresentation();
-        return Integer.parseInt(gammaRateBinary, 2) * Integer.parseInt(epsilonRateBinary, 2);
+        return getGammaRate() * getEpsilonRate();
     }
 
+    @GetMapping("day3/part2")
+    public int getLifeSupportRating() {
+        return getOxygenGeneratorRating() * getCo2ScrubberRating();
+    }
 
     private void countCharacters(String input) {
-        for(int i = 0; i < input.length(); i++) {
-            if(input.charAt(i) == '0') {
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == '0') {
                 countZeroes[i]++;
             } else {
                 countOnes[i]++;
@@ -32,31 +37,69 @@ public class Day3 {
         }
     }
 
-    private String getGammaBinaryRepresentation() {
+    private int getGammaRate() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < 12; i++) {
+        for (int i = 0; i < 12; i++) {
             stringBuilder.append(getMostCommonBitOnPosition(i));
         }
-        return stringBuilder.toString();
+        return Integer.parseInt(stringBuilder.toString(), 2);
     }
 
-    private String getEpsilonBinaryRepresentation() {
+    private int getEpsilonRate() {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < 12; i++) {
-            if("1".equals(getMostCommonBitOnPosition(i))) {
+        for (int i = 0; i < 12; i++) {
+            if ("1".equals(getMostCommonBitOnPosition(i))) {
                 stringBuilder.append("0");
             } else {
                 stringBuilder.append("1");
             }
         }
-        return stringBuilder.toString();
+        return Integer.parseInt(stringBuilder.toString(), 2);
     }
 
     private String getMostCommonBitOnPosition(int position) {
-        if(countOnes[position] > countZeroes[position]) {
+        if (countOnes[position] >= countZeroes[position]) {
             return "1";
         } else {
             return "0";
         }
+    }
+
+    private int getOxygenGeneratorRating() {
+        List<String> filteredMeasurements = new ArrayList<>(FileService.getInputAsListString(INPUT_FILE_NAME));
+
+        int i = 0;
+        while (filteredMeasurements.size() > 1) {
+            int temp = i++;
+            int countOnes = (int) filteredMeasurements.stream()
+                    .map(measurement -> measurement.charAt(temp))
+                    .filter(c -> c == '1')
+                    .count();
+            if (countOnes < (double) filteredMeasurements.size() / 2) {
+                filteredMeasurements.removeIf(measurement -> measurement.charAt(temp) == '1');
+            } else {
+                filteredMeasurements.removeIf(measurement -> measurement.charAt(temp) == '0');
+            }
+        }
+        return Integer.parseInt(filteredMeasurements.get(0), 2);
+    }
+
+    private int getCo2ScrubberRating() {
+        List<String> filteredMeasurements = new ArrayList<>(FileService.getInputAsListString(INPUT_FILE_NAME));
+
+        int i = 0;
+        while (filteredMeasurements.size() > 1) {
+            int temp = i++;
+            int countOnes = (int) filteredMeasurements.stream()
+                    .map(measurement -> measurement.charAt(temp))
+                    .filter(c -> c == '1')
+                    .count();
+            if (countOnes < (double) filteredMeasurements.size() / 2) {
+                filteredMeasurements.removeIf(measurement -> measurement.charAt(temp) == '0');
+            } else {
+                filteredMeasurements.removeIf(measurement -> measurement.charAt(temp) == '1');
+            }
+        }
+        return Integer.parseInt(filteredMeasurements.get(0), 2);
     }
 }
