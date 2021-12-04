@@ -84,14 +84,16 @@ public class Day4 {
     private int getPlayBingoResult(boolean keepPlaying) {
         while ((!keepPlaying && winningBingoCard == null) || (keepPlaying && areBingoCardsWithoutWinLeft())) {
             int drawnNumber = numbersToDraw.get(0);
-            log.info("Drawn {}", drawnNumber);
+            log.info("Drawn {}, count of numbers left: {}", drawnNumber, numbersToDraw.size());
             lastNumberDrawn = drawnNumber;
             markDrawnNumberOnBingoCards(drawnNumber);
             checkForWinningCards();
             numbersToDraw.remove(0);
         }
         assert winningBingoCard != null;
-        return lastNumberDrawn * winningBingoCard.getSumOfUnmarkedNumbers();
+        int answer = lastNumberDrawn * winningBingoCard.getSumOfUnmarkedNumbers();
+        log.info("Answer: {}", answer);
+        return answer;
     }
 
     private void markDrawnNumberOnBingoCards(int drawnNumber) {
@@ -148,7 +150,7 @@ public class Day4 {
                     return true;
                 }
             }
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
                 if (bingoCardNumbers
                         .stream()
