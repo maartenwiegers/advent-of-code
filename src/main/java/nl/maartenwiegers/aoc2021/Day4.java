@@ -27,14 +27,14 @@ public class Day4 {
     public int solveBingoGetFirstWin() {
         setNumbersToDraw();
         setBingoCards();
-        return getPlayBingoResult();
+        return getPlayBingoResult(false);
     }
 
     @GetMapping("day4/part2")
     public int solveBingoGetLastWin() {
         setNumbersToDraw();
         setBingoCards();
-        return getKeepPlayingBingoResult();
+        return getPlayBingoResult(true);
     }
 
     private void setNumbersToDraw() {
@@ -71,8 +71,8 @@ public class Day4 {
         return new BingoCard(newBingoCardNumbers);
     }
 
-    private int getPlayBingoResult() {
-        while (winningBingoCard == null && numbersToDraw.size() >= 1) {
+    private int getPlayBingoResult(boolean keepPlaying) {
+        while ((!keepPlaying && winningBingoCard == null) || (keepPlaying && bingoCards.stream().anyMatch(bingoCard -> !bingoCard.hasBingo()))) {
             int drawnNumber = numbersToDraw.get(0);
             log.info("Drawn {}", drawnNumber);
             lastNumberDrawn = drawnNumber;
@@ -82,18 +82,6 @@ public class Day4 {
         }
         assert winningBingoCard != null;
         log.info("Winning card: {}", winningBingoCard);
-        return lastNumberDrawn * winningBingoCard.getSumOfUnmarkedNumbers();
-    }
-
-    private int getKeepPlayingBingoResult() {
-        while (bingoCards.stream().anyMatch(bingoCard -> !bingoCard.hasBingo())) {
-            int drawnNumber = numbersToDraw.get(0);
-            log.info("Drawn {}", drawnNumber);
-            lastNumberDrawn = drawnNumber;
-            markDrawnNumberOnBingoCards(drawnNumber);
-            checkForWinningCards();
-            numbersToDraw.remove(0);
-        }
         return lastNumberDrawn * winningBingoCard.getSumOfUnmarkedNumbers();
     }
 
