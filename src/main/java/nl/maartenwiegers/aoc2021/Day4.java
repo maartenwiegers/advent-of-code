@@ -18,11 +18,11 @@ public class Day4 {
 
     private static final String BINGO_CARDS_FILE_NAME = "input/04-bingocards-%s.txt";
     private static final String DRAW_NUMBERS_FILE_NAME = "input/04-drawnumbers-%s.txt";
+    protected int gridSize;
     private List<Integer> numbersToDraw = new ArrayList<>();
     private List<BingoCard> bingoCards = new ArrayList<>();
     private int lastNumberDrawn;
     private BingoCard winningBingoCard;
-    protected int gridSize;
 
     @GetMapping("day4/part1/{gridSize}")
     public int solveBingoGetFirstWin(@PathVariable int gridSize) {
@@ -66,7 +66,7 @@ public class Day4 {
             List<String> rowsForThisCard = new ArrayList<>();
             inputs.stream().skip(i).limit(gridSize).forEachOrdered(rowsForThisCard::add);
             createdCards.add(getBingoCardFromInput(i, rowsForThisCard));
-       }
+        }
         return createdCards;
     }
 
@@ -141,6 +141,10 @@ public class Day4 {
         }
 
         public boolean hasWin() {
+            if (bingoCardNumbers.stream().noneMatch(BingoCardNumber::isMarked)) {
+                return false;
+            }
+
             for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
                 if (bingoCardNumbers
