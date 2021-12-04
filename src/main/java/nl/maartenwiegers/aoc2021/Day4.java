@@ -65,12 +65,12 @@ public class Day4 {
         for (int i = 0; i < inputs.size() - gridSize; i = i + gridSize) {
             List<String> rowsForThisCard = new ArrayList<>();
             inputs.stream().skip(i).limit(gridSize).forEachOrdered(rowsForThisCard::add);
-            createdCards.add(getBingoCardFromInput(rowsForThisCard));
+            createdCards.add(getBingoCardFromInput(i, rowsForThisCard));
        }
         return createdCards;
     }
 
-    private BingoCard getBingoCardFromInput(List<String> rows) {
+    private BingoCard getBingoCardFromInput(int id, List<String> rows) {
         List<BingoCardNumber> newBingoCardNumbers = new ArrayList<>();
         for (int i = 0; i < rows.size(); i++) {
             String[] columns = StringUtils.split(rows.get(i));
@@ -78,7 +78,7 @@ public class Day4 {
                 newBingoCardNumbers.add(new BingoCardNumber(i, j, Integer.parseInt(columns[j]), false));
             }
         }
-        return new BingoCard(newBingoCardNumbers, gridSize);
+        return new BingoCard(id, newBingoCardNumbers, gridSize);
     }
 
     private int getPlayBingoResult(boolean keepPlaying) {
@@ -128,6 +128,7 @@ public class Day4 {
     @Data
     @AllArgsConstructor
     public static class BingoCard {
+        int id;
         List<BingoCardNumber> bingoCardNumbers;
         private int gridSize;
 

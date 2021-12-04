@@ -18,4 +18,9 @@ public class Day4Test {
         assertEquals(26878, day4.solveBingoGetLastWin(5));
     }
 
+    @Test
+    public void shouldFindCorrectAnswerForDay4Part1WithGrid100() {
+        assertEquals(0, day4.solveBingoGetFirstWin(100));
+    }
+
 }
