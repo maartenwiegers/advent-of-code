@@ -17,7 +17,6 @@ public class Day4 {
 
     private static final String BINGO_CARDS_FILE_NAME = "input/04-bingocards.txt";
     private static final String DRAW_NUMBERS_FILE_NAME = "input/04-drawnumbers.txt";
-    private final int cardsWon = 0;
     private List<Integer> numbersToDraw = new ArrayList<>();
     private List<BingoCard> bingoCards = new ArrayList<>();
     private int lastNumberDrawn;
@@ -72,7 +71,7 @@ public class Day4 {
     }
 
     private int getPlayBingoResult(boolean keepPlaying) {
-        while ((!keepPlaying && winningBingoCard == null) || (keepPlaying && bingoCards.stream().anyMatch(bingoCard -> !bingoCard.hasBingo()))) {
+        while ((!keepPlaying && winningBingoCard == null) || (keepPlaying && areBingoCardsWithoutWinLeft())) {
             int drawnNumber = numbersToDraw.get(0);
             log.info("Drawn {}", drawnNumber);
             lastNumberDrawn = drawnNumber;
@@ -81,7 +80,6 @@ public class Day4 {
             numbersToDraw.remove(0);
         }
         assert winningBingoCard != null;
-        log.info("Winning card: {}", winningBingoCard);
         return lastNumberDrawn * winningBingoCard.getSumOfUnmarkedNumbers();
     }
 
@@ -91,11 +89,18 @@ public class Day4 {
 
     private void checkForWinningCards() {
         for (BingoCard bingoCard : bingoCards) {
-            if (bingoCard.hasBingo()) {
+            if (bingoCard.hasWin()) {
                 winningBingoCard = bingoCard;
+                log.info("Winning card: {}", winningBingoCard);
             }
         }
-        bingoCards.removeIf(BingoCard::hasBingo);
+        bingoCards.removeIf(BingoCard::hasWin);
+    }
+
+    private boolean areBingoCardsWithoutWinLeft() {
+        return bingoCards
+                .stream()
+                .anyMatch(bingoCard -> !bingoCard.hasWin());
     }
 
     @Data
@@ -113,22 +118,31 @@ public class Day4 {
         List<BingoCardNumber> bingoCardNumbers;
 
         public int getSumOfUnmarkedNumbers() {
-            return bingoCardNumbers.stream()
+            return bingoCardNumbers
+                    .stream()
                     .filter(bingoCardNumber -> !bingoCardNumber.isMarked())
                     .mapToInt(BingoCardNumber::getNumber)
                     .sum();
         }
 
-        public boolean hasBingo() {
+        public boolean hasWin() {
             for (int i = 0; i < 5; i++) {
                 int finalI = i;
-                if (bingoCardNumbers.stream().filter(BingoCardNumber::isMarked).filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI).count() == 5) {
+                if (bingoCardNumbers
+                        .stream()
+                        .filter(BingoCardNumber::isMarked)
+                        .filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI)
+                        .count() == 5) {
                     return true;
                 }
             }
             for (int i = 0; i < 5; i++) {
                 int finalI = i;
-                if (bingoCardNumbers.stream().filter(BingoCardNumber::isMarked).filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI).count() == 5) {
+                if (bingoCardNumbers
+                        .stream()
+                        .filter(BingoCardNumber::isMarked)
+                        .filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI)
+                        .count() == 5) {
                     return true;
                 }
             }
