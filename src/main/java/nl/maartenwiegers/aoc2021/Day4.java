@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @RestController
 @Slf4j
@@ -27,7 +26,9 @@ public class Day4 {
 
     @GetMapping("day4/part1/{gridSize}")
     public int solveBingoGetFirstWin(@PathVariable int gridSize) {
+        log.warn("Playing part 1 with grid size of {} ", gridSize);
         this.gridSize = gridSize;
+        winningBingoCard = null;
         setNumbersToDraw();
         setBingoCards();
         return getPlayBingoResult(false);
@@ -35,7 +36,9 @@ public class Day4 {
 
     @GetMapping("day4/part2/{gridSize}")
     public int solveBingoGetLastWin(@PathVariable int gridSize) {
+        log.warn("Playing part 2 with grid size of {} ", gridSize);
         this.gridSize = gridSize;
+        winningBingoCard = null;
         setNumbersToDraw();
         setBingoCards();
         return getPlayBingoResult(true);
@@ -43,6 +46,7 @@ public class Day4 {
 
     private void setNumbersToDraw() {
         numbersToDraw = new ArrayList<>(getNumbersToDrawFromInput());
+        log.info("Populated {} numbers to draw: {}", numbersToDraw.size(), numbersToDraw);
     }
 
     private void setBingoCards() {
