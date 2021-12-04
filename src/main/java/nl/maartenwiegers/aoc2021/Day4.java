@@ -6,31 +6,36 @@ import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc2021.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @RestController
 @Slf4j
 public class Day4 {
 
-    private static final String BINGO_CARDS_FILE_NAME = "input/04-bingocards.txt";
-    private static final String DRAW_NUMBERS_FILE_NAME = "input/04-drawnumbers.txt";
+    private static final String BINGO_CARDS_FILE_NAME = "input/04-bingocards-%s.txt";
+    private static final String DRAW_NUMBERS_FILE_NAME = "input/04-drawnumbers-%s.txt";
     private List<Integer> numbersToDraw = new ArrayList<>();
     private List<BingoCard> bingoCards = new ArrayList<>();
     private int lastNumberDrawn;
     private BingoCard winningBingoCard;
+    protected int gridSize;
 
-    @GetMapping("day4/part1")
-    public int solveBingoGetFirstWin() {
+    @GetMapping("day4/part1/{gridSize}")
+    public int solveBingoGetFirstWin(@PathVariable int gridSize) {
+        this.gridSize = gridSize;
         setNumbersToDraw();
         setBingoCards();
         return getPlayBingoResult(false);
     }
 
-    @GetMapping("day4/part2")
-    public int solveBingoGetLastWin() {
+    @GetMapping("day4/part2/{gridSize}")
+    public int solveBingoGetLastWin(@PathVariable int gridSize) {
+        this.gridSize = gridSize;
         setNumbersToDraw();
         setBingoCards();
         return getPlayBingoResult(true);
@@ -46,16 +51,18 @@ public class Day4 {
     }
 
     private List<Integer> getNumbersToDrawFromInput() {
-        return FileService.getCommaSeparatedInputAsListInteger(DRAW_NUMBERS_FILE_NAME);
+        return FileService.getCommaSeparatedInputAsListInteger(String.format(DRAW_NUMBERS_FILE_NAME, gridSize));
     }
 
     private List<BingoCard> getBingoCardsFromInput() {
         List<BingoCard> createdCards = new ArrayList<>();
-        List<String> inputs = new ArrayList<>(FileService.getInputAsListString(BINGO_CARDS_FILE_NAME));
+        List<String> inputs = new ArrayList<>(FileService.getInputAsListString(String.format(BINGO_CARDS_FILE_NAME, gridSize)));
         inputs.removeIf(StringUtils::isBlank);
-        for (int i = 0; i < inputs.size() - 5; i = i + 5) {
-            createdCards.add(getBingoCardFromInput(List.of(inputs.get(i), inputs.get(i + 1), inputs.get(i + 2), inputs.get(i + 3), inputs.get(i + 4))));
-        }
+        for (int i = 0; i < inputs.size() - gridSize; i = i + gridSize) {
+            List<String> rowsForThisCard = new ArrayList<>();
+            inputs.stream().skip(i).limit(gridSize).forEachOrdered(rowsForThisCard::add);
+            createdCards.add(getBingoCardFromInput(rowsForThisCard));
+       }
         return createdCards;
     }
 
@@ -67,7 +74,7 @@ public class Day4 {
                 newBingoCardNumbers.add(new BingoCardNumber(i, j, Integer.parseInt(columns[j]), false));
             }
         }
-        return new BingoCard(newBingoCardNumbers);
+        return new BingoCard(newBingoCardNumbers, gridSize);
     }
 
     private int getPlayBingoResult(boolean keepPlaying) {
@@ -116,6 +123,7 @@ public class Day4 {
     @AllArgsConstructor
     public static class BingoCard {
         List<BingoCardNumber> bingoCardNumbers;
+        private int gridSize;
 
         public int getSumOfUnmarkedNumbers() {
             return bingoCardNumbers
@@ -126,13 +134,13 @@ public class Day4 {
         }
 
         public boolean hasWin() {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
                 if (bingoCardNumbers
                         .stream()
                         .filter(BingoCardNumber::isMarked)
                         .filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI)
-                        .count() == 5) {
+                        .count() == gridSize) {
                     return true;
                 }
             }
@@ -142,7 +150,7 @@ public class Day4 {
                         .stream()
                         .filter(BingoCardNumber::isMarked)
                         .filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI)
-                        .count() == 5) {
+                        .count() == gridSize) {
                     return true;
                 }
             }

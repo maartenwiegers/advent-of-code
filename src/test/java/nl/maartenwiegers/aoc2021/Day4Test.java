@@ -10,12 +10,12 @@ public class Day4Test {
 
     @Test
     public void shouldFindCorrectAnswerForDay4Part1() {
-        assertEquals(49686, day4.solveBingoGetFirstWin());
+        assertEquals(49686, day4.solveBingoGetFirstWin(5));
     }
 
     @Test
     public void shouldFindCorrectAnswerForDay4Part2() {
-        assertEquals(26878, day4.solveBingoGetLastWin());
+        assertEquals(26878, day4.solveBingoGetLastWin(5));
     }
 
 }
