@@ -144,9 +144,8 @@ public class Day4 {
                 int finalI = i;
                 if (bingoCardNumbers
                         .stream()
-                        .filter(BingoCardNumber::isMarked)
                         .filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI)
-                        .count() == gridSize) {
+                        .allMatch(BingoCardNumber::isMarked)) {
                     return true;
                 }
             }
@@ -154,9 +153,8 @@ public class Day4 {
                 int finalI = i;
                 if (bingoCardNumbers
                         .stream()
-                        .filter(BingoCardNumber::isMarked)
                         .filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI)
-                        .count() == gridSize) {
+                        .allMatch(BingoCardNumber::isMarked)) {
                     return true;
                 }
             }
