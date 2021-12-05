@@ -81,18 +81,17 @@ public class Day5 {
     }
 
     private void drawDiagonalLine(Line line) {
-        log.info("Drawing diagonal line {}", line);
         int x = line.xStart;
         int y = line.yStart;
         int deltaX = x < line.xEnd ? 1 : -1;
         int deltaY = y < line.yEnd ? 1 : -1;
 
-        while(x != line.xEnd){
+        grid[y][x]++;
+        while (x != line.xEnd) {
             grid[y][x]++;
             x += deltaX;
             y += deltaY;
         }
-        grid[y][x]++;
     }
 
     private int getCountIntersections() {
