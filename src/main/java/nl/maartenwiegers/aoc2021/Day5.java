@@ -18,12 +18,19 @@ public class Day5 {
 
     private static final String FILE_NAME = "input/05.txt";
     private static final int GRID_SIZE = 1000;
-    private int[][] grid;
     private final List<Line> lines = new ArrayList<>();
+    private int[][] grid;
 
     @GetMapping("day5/part1")
     public int getCountIntersectionsWithoutVertical() {
         setLines(true);
+        drawLinesOnGrid();
+        return getCountIntersections();
+    }
+
+    @GetMapping("day5/part2")
+    public int getCountIntersectionsWithVertical() {
+        setLines(false);
         drawLinesOnGrid();
         return getCountIntersections();
     }
@@ -61,7 +68,7 @@ public class Day5 {
         int start = Math.min(line.xStart, line.xEnd);
         int end = Math.max(line.xStart, line.xEnd);
         for (int i = start; i <= end; i++) {
-            grid[i][line.yStart]++;
+            grid[line.yStart][i]++;
         }
     }
 
@@ -69,15 +76,29 @@ public class Day5 {
         int start = Math.min(line.yStart, line.yEnd);
         int end = Math.max(line.yStart, line.yEnd);
         for (int i = start; i <= end; i++) {
-            grid[line.xStart][i]++;
+            grid[i][line.xStart]++;
         }
     }
 
     private void drawDiagonalLine(Line line) {
-        // TODO part 2
+        log.info("Drawing diagonal line {}", line);
+        int x = line.xStart;
+        int y = line.yStart;
+        int deltaX = x < line.xEnd ? 1 : -1;
+        int deltaY = y < line.yEnd ? 1 : -1;
+
+        while(x != line.xEnd){
+            grid[y][x]++;
+            x += deltaX;
+            y += deltaY;
+        }
+        grid[y][x]++;
     }
 
     private int getCountIntersections() {
+        for (int i = 0; i < GRID_SIZE; i++) {
+            log.info(Arrays.toString(grid[i]).replace("0", ".").replace(", ", ""));
+        }
         return Arrays.stream(grid).mapToInt(row -> (int) Arrays.stream(row).filter(count -> count > 1).count()).sum();
     }
 
@@ -107,7 +128,7 @@ public class Day5 {
                 return Direction.VERTICAL;
             } else if (yStart == yEnd && xStart != xEnd) {
                 return Direction.HORIZONTAL;
-            } else if (Math.abs(xEnd - xStart) == Math.abs(yEnd - yStart))  {
+            } else if (Math.abs(xEnd - xStart) == Math.abs(yEnd - yStart)) {
                 return Direction.DIAGONAL;
             } else {
                 return null;
