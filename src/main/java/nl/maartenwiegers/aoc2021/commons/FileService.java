@@ -40,4 +40,11 @@ public class FileService {
                 .map(Integer::valueOf)
                 .toList();
     }
+
+    @SneakyThrows
+    public static List<Long> getCommaSeparatedInputAsListLong(@NonNull String filename) {
+        return Arrays.stream(Files.readString(FileService.getPath(filename)).split(","))
+                .map(Long::valueOf)
+                .toList();
+    }
 }
