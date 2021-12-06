@@ -16,20 +16,22 @@ import java.util.List;
 @Slf4j
 public class Day5 {
 
-    private static final String FILE_NAME = "input/05.txt";
-    private static final int GRID_SIZE = 1000;
+    private static final String FILE_NAME = "input/05-%s.txt";
+    private int gridSize = 1000;
     private final List<Line> lines = new ArrayList<>();
     private int[][] grid;
 
     @GetMapping("day5/part1")
-    public int getCountIntersectionsWithoutVertical() {
+    public int getCountIntersectionsWithoutVertical(int gridSize) {
+        this.gridSize = gridSize;
         setLines(true);
         drawLinesOnGrid();
         return getCountIntersections();
     }
 
     @GetMapping("day5/part2")
-    public int getCountIntersectionsWithVertical() {
+    public int getCountIntersectionsWithVertical(int gridSize) {
+        this.gridSize = gridSize;
         setLines(false);
         drawLinesOnGrid();
         return getCountIntersections();
@@ -37,7 +39,7 @@ public class Day5 {
 
     private void setLines(boolean ignoreDiagonals) {
         lines.clear();
-        FileService.getInputAsListString(FILE_NAME).forEach(input -> {
+        FileService.getInputAsListString(String.format(FILE_NAME, gridSize)).forEach(input -> {
             String start = StringUtils.split(input, "->")[0].trim();
             String end = StringUtils.split(input, "->")[1].trim();
             lines.add(new Line(start.split(",")[0], start.split(",")[1], end.split(",")[0], end.split(",")[1]));
@@ -50,7 +52,7 @@ public class Day5 {
     }
 
     private void drawLinesOnGrid() {
-        grid = new int[GRID_SIZE][GRID_SIZE];
+        grid = new int[gridSize][gridSize];
         lines.forEach(this::drawLine);
     }
 
@@ -95,9 +97,9 @@ public class Day5 {
     }
 
     private int getCountIntersections() {
-        for (int i = 0; i < GRID_SIZE; i++) {
-            log.info(Arrays.toString(grid[i]).replace("0", ".").replace(", ", ""));
-        }
+//        for (int i = 0; i < gridSize; i++) {
+//            log.info(Arrays.toString(grid[i]).replace("0", ".").replace(", ", ""));
+//        }
         return Arrays.stream(grid).mapToInt(row -> (int) Arrays.stream(row).filter(count -> count > 1).count()).sum();
     }
 
