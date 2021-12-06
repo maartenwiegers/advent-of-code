@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 @RestController
 @Slf4j
@@ -26,8 +25,8 @@ public class Day6 {
         log.info("Initial state: {}", fish);
         for (int i = 1; i <= afterDays; i++) {
             int fishSize = fish.size();
-            for(int f = 0; f < fishSize; f++){
-                if(fish.get(f) == 0L) {
+            for (int f = 0; f < fishSize; f++) {
+                if (fish.get(f) == 0L) {
                     fish.set(f, 6L);
                     fish.add(8L);
                 } else {
@@ -37,16 +36,5 @@ public class Day6 {
             log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", fish);
         }
         return fish.size();
-    }
-
-    static class SubtractOperator implements UnaryOperator<Long> {
-        @Override
-        public Long apply(Long l) {
-            if (l == 0L) {
-                return 6L;
-            } else {
-                return l - 1;
-            }
-        }
     }
 }
