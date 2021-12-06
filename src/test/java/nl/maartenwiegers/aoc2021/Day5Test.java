@@ -15,6 +15,6 @@ public class Day5Test {
 
     @Test
     public void shouldFindCorrectAnswerForDay5Part2() {
-        assertEquals(21698, day5.getCountIntersectionsWithVertical());
+        assertEquals(21812, day5.getCountIntersectionsWithVertical());
     }
 }

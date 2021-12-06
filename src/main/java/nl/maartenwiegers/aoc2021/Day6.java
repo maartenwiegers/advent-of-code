@@ -33,7 +33,7 @@ public class Day6 {
                     fish.set(f, fish.get(f) - 1);
                 }
             }
-            log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", fish);
+            log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", fish.toString().substring(0, 100));
         }
         return fish.size();
     }
