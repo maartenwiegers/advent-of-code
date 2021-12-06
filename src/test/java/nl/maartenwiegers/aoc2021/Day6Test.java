@@ -15,6 +15,6 @@ public class Day6Test {
 
     @Test
     public void shouldFindCorrectAnswerForDay6Part2() {
-        assertEquals(386536, day6.getCountOfFishAfterDays(256));
+        assertEquals(1732821262171L, day6.getCountOfFishAfterDays(256));
     }
 }

@@ -7,34 +7,30 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 @RestController
 @Slf4j
 public class Day6 {
 
     private static final String FILE_NAME = "input/06.txt";
-    private final List<Long> fish = new ArrayList<>();
+    private long[] fish = new long[9];
 
     @GetMapping("day6/part1/{afterDays}")
     public long getCountOfFishAfterDays(@PathVariable int afterDays) {
-        fish.clear();
-        List<Long> inputs = FileService.getCommaSeparatedInputAsListLong(FILE_NAME);
-        fish.addAll(inputs);
-        log.info("Initial state: {}", fish);
-        for (int i = 1; i <= afterDays; i++) {
-            int fishSize = fish.size();
-            for (int f = 0; f < fishSize; f++) {
-                if (fish.get(f) == 0L) {
-                    fish.set(f, 6L);
-                    fish.add(8L);
-                } else {
-                    fish.set(f, fish.get(f) - 1);
-                }
-            }
-            log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", fish.toString().substring(0, 100));
+        fish = new long[9];
+        for(int i = 0; i < 9; i++){
+            fish[i] = 0;
         }
-        return fish.size();
+        FileService.getCommaSeparatedInputAsListInteger(FILE_NAME).forEach(input -> fish[input]++);
+        log.info("Initial state: {}", fish);
+        for(int i = 1; i <= afterDays; i++) {
+            long births = fish[0];
+            System.arraycopy(fish, 1, fish, 0, 8);
+            fish[6] += births;
+            fish[8] = births;
+            log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", fish);
+        }
+        return Arrays.stream(fish).reduce(Long::sum).getAsLong();
     }
 }
