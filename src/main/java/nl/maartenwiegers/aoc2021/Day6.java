@@ -14,23 +14,19 @@ import java.util.Arrays;
 public class Day6 {
 
     private static final String FILE_NAME = "input/06.txt";
-    private long[] fish = new long[9];
+    private final long[] fish = new long[9];
 
-    @GetMapping("day6/part1/{afterDays}")
+    @GetMapping("day6/{afterDays}")
     public long getCountOfFishAfterDays(@PathVariable int afterDays) {
-        fish = new long[9];
-        for(int i = 0; i < 9; i++){
-            fish[i] = 0;
-        }
         FileService.getCommaSeparatedInputAsListInteger(FILE_NAME).forEach(input -> fish[input]++);
         log.info("Initial state: {}", fish);
-        for(int i = 1; i <= afterDays; i++) {
+        for (int i = 1; i <= afterDays; i++) {
             long births = fish[0];
             System.arraycopy(fish, 1, fish, 0, 8);
             fish[6] += births;
             fish[8] = births;
             log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", fish);
         }
-        return Arrays.stream(fish).reduce(Long::sum).getAsLong();
+        return Arrays.stream(fish).sum();
     }
 }
