@@ -23,7 +23,6 @@ public class Day5Test {
         assertEquals(6530681, day5.getCountIntersectionsWithoutVertical(6400));
     }
 
-    @Test
     public void shouldFindCorrectAnswerForDay5Part2GridSize6400() {
         assertEquals(9039258, day5.getCountIntersectionsWithVertical(6400));
     }
@@ -33,7 +32,6 @@ public class Day5Test {
         assertEquals(30405812, day5.getCountIntersectionsWithoutVertical(10000));
     }
 
-    @Test
     public void shouldFindCorrectAnswerForDay5Part2GridSize10000() {
         assertEquals(39512010, day5.getCountIntersectionsWithVertical(10000));
     }
