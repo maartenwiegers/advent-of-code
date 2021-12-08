@@ -22,7 +22,7 @@ public class Day8Test {
     private static Stream<Arguments> getPart2Arguments() {
         return Stream.of(
                 Arguments.of("example", 61229),
-                Arguments.of("puzzleinput", 416)
+                Arguments.of("puzzleinput", 1043697)
         );
     }
 
