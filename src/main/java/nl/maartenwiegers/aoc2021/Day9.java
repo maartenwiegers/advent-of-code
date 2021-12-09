@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -81,13 +79,24 @@ public class Day9 {
         if (y < gridHeight - 1) {
             adjacentPoints.add(new Coordinate(y + 1, x, grid[y + 1][x]));
         }
-        log.debug("y {}, x {} has adjacent points {}", y, x, adjacentPoints);
         return adjacentPoints;
     }
 
     private int getBasinCalculation() {
+        List<Integer> basinSizes = new ArrayList<>();
+        lowPointsCoordinates.forEach(lp -> basinSizes.add(getBasinSize(new HashSet<>(Collections.singleton(lp)))));
+        basinSizes.sort(Integer::compareTo);
+        Collections.reverse(basinSizes);
+        log.info("Found basin sizes: {}", basinSizes);
+        return basinSizes.stream().limit(3).reduce(1, Math::multiplyExact);
+    }
 
-        return 0;
+    private int getBasinSize(HashSet<Coordinate> basin) {
+        List<Coordinate> coordinates;
+        do {
+            coordinates = basin.stream().flatMap(b -> getAdjacentPoints(b.y, b.x).stream()).filter(p -> p.depth < 9).toList();
+        } while (basin.addAll(coordinates));
+        return basin.size();
     }
 
     @Data
