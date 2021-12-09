@@ -17,8 +17,8 @@ import java.util.List;
 public class Day5 {
 
     private static final String FILE_NAME = "input/05-%s.txt";
-    private int gridSize = 1000;
     private final List<Line> lines = new ArrayList<>();
+    private int gridSize = 1000;
     private int[][] grid;
 
     @GetMapping("day5/part1")
@@ -97,16 +97,11 @@ public class Day5 {
     }
 
     private int getCountIntersections() {
-//        for (int i = 0; i < gridSize; i++) {
-//            log.info(Arrays.toString(grid[i]).replace("0", ".").replace(", ", ""));
-//        }
         return Arrays.stream(grid).mapToInt(row -> (int) Arrays.stream(row).filter(count -> count > 1).count()).sum();
     }
 
     public enum Direction {
-        HORIZONTAL,
-        VERTICAL,
-        DIAGONAL
+        HORIZONTAL, VERTICAL, DIAGONAL
     }
 
     @Data

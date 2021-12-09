@@ -71,10 +71,7 @@ public class Day3 {
         int i = 0;
         while (filteredMeasurements.size() > 1) {
             int temp = i++;
-            int countOnes = (int) filteredMeasurements.stream()
-                    .map(measurement -> measurement.charAt(temp))
-                    .filter(c -> c == '1')
-                    .count();
+            int countOnes = (int) filteredMeasurements.stream().map(measurement -> measurement.charAt(temp)).filter(c -> c == '1').count();
             if (countOnes < (double) filteredMeasurements.size() / 2) {
                 filteredMeasurements.removeIf(measurement -> measurement.charAt(temp) == '1');
             } else {
@@ -90,10 +87,7 @@ public class Day3 {
         int i = 0;
         while (filteredMeasurements.size() > 1) {
             int temp = i++;
-            int countOnes = (int) filteredMeasurements.stream()
-                    .map(measurement -> measurement.charAt(temp))
-                    .filter(c -> c == '1')
-                    .count();
+            int countOnes = (int) filteredMeasurements.stream().map(measurement -> measurement.charAt(temp)).filter(c -> c == '1').count();
             if (countOnes < (double) filteredMeasurements.size() / 2) {
                 filteredMeasurements.removeIf(measurement -> measurement.charAt(temp) == '0');
             } else {

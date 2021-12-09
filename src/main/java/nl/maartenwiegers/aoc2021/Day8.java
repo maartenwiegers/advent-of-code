@@ -58,8 +58,7 @@ public class Day8 {
         return sum;
     }
 
-
-    private static String[] calcNumSegments(List<String> uniques) {
+    private String[] calcNumSegments(List<String> uniques) {
         List<String> uniqueCopy = new ArrayList<>(uniques);
         String[] numPatterns = new String[10];
 
@@ -103,7 +102,7 @@ public class Day8 {
         return numPatterns;
     }
 
-    private static boolean containsAll(String val1, String val2) {
+    private boolean containsAll(String val1, String val2) {
         for (int i = 0; i < val2.length(); i++) {
             if (!val1.contains("" + val2.charAt(i))) {
                 return false;
@@ -117,5 +116,6 @@ public class Day8 {
         Arrays.sort(charArray);
         return new String(charArray);
     }
+
 
 }

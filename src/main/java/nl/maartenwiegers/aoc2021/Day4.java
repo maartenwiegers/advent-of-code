@@ -111,9 +111,7 @@ public class Day4 {
     }
 
     private boolean areBingoCardsWithoutWinLeft() {
-        return bingoCards
-                .stream()
-                .anyMatch(bingoCard -> !bingoCard.hasWin());
+        return bingoCards.stream().anyMatch(bingoCard -> !bingoCard.hasWin());
     }
 
     @Data
@@ -133,11 +131,7 @@ public class Day4 {
         private int gridSize;
 
         public int getSumOfUnmarkedNumbers() {
-            return bingoCardNumbers
-                    .stream()
-                    .filter(bingoCardNumber -> !bingoCardNumber.isMarked())
-                    .mapToInt(BingoCardNumber::getNumber)
-                    .sum();
+            return bingoCardNumbers.stream().filter(bingoCardNumber -> !bingoCardNumber.isMarked()).mapToInt(BingoCardNumber::getNumber).sum();
         }
 
         public boolean hasWin() {
@@ -147,19 +141,13 @@ public class Day4 {
 
             for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
-                if (bingoCardNumbers
-                        .stream()
-                        .filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI)
-                        .allMatch(BingoCardNumber::isMarked)) {
+                if (bingoCardNumbers.stream().filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI).allMatch(BingoCardNumber::isMarked)) {
                     return true;
                 }
             }
             for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
-                if (bingoCardNumbers
-                        .stream()
-                        .filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI)
-                        .allMatch(BingoCardNumber::isMarked)) {
+                if (bingoCardNumbers.stream().filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI).allMatch(BingoCardNumber::isMarked)) {
                     return true;
                 }
             }
@@ -167,10 +155,7 @@ public class Day4 {
         }
 
         public void markDrawnNumber(int drawnNumber) {
-            bingoCardNumbers
-                    .stream()
-                    .filter(bingoCardNumber -> bingoCardNumber.number == drawnNumber)
-                    .forEach(bingoCardNumber -> bingoCardNumber.setMarked(true));
+            bingoCardNumbers.stream().filter(bingoCardNumber -> bingoCardNumber.number == drawnNumber).forEach(bingoCardNumber -> bingoCardNumber.setMarked(true));
         }
     }
 }

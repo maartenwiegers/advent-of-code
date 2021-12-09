@@ -19,7 +19,7 @@ public class Day6 {
 
     @GetMapping("day6/{afterDays}")
     public BigInteger getCountOfFishAfterDays(@PathVariable int afterDays) {
-        for(int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             fish[i] = BigInteger.ZERO;
         }
         FileService.getCommaSeparatedInputAsListInteger(FILE_NAME).forEach(input -> fish[input] = fish[input].add(BigInteger.ONE));
