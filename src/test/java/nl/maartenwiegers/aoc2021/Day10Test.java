@@ -13,28 +13,22 @@ public class Day10Test {
     private final Day10 day10 = new Day10();
 
     private static Stream<Arguments> getPart1Arguments() {
-        return Stream.of(
-                Arguments.of("example", 26397),
-                Arguments.of("puzzleinput", 168417)
-        );
+        return Stream.of(Arguments.of("example", 26397), Arguments.of("puzzleinput", 168417), Arguments.of("up1", 26448));
     }
 
     private static Stream<Arguments> getPart2Arguments() {
-        return Stream.of(
-                Arguments.of("example", 1134),
-                Arguments.of("puzzleinput", 1235430)
-        );
+        return Stream.of(Arguments.of("example", 288957L), Arguments.of("puzzleinput", 2802519786L), Arguments.of("up1", 14841L));
     }
 
     @ParameterizedTest
     @MethodSource("getPart1Arguments")
-    public void shouldGetCorrectAnswersForDay10Part1(String filename, int expected){
+    public void shouldGetCorrectAnswersForDay10Part1(String filename, int expected) {
         assertEquals(expected, day10.getScore(filename));
     }
 
-//    @ParameterizedTest
-//    @MethodSource("getPart2Arguments")
-//    public void shouldGetCorrectAnswersForDay10Part2(String filename, int expected){
-//        assertEquals(expected, day9.getFactorOfThreeLargestBasins(filename));
-//    }
+    @ParameterizedTest
+    @MethodSource("getPart2Arguments")
+    public void shouldGetCorrectAnswersForDay10Part2(String filename, long expected) {
+        assertEquals(expected, day10.getAutocompleteScore(filename));
+    }
 }
