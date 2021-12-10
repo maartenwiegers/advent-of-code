@@ -22,7 +22,8 @@ public class Day6 {
         for (int i = 0; i < 9; i++) {
             fish[i] = BigInteger.ZERO;
         }
-        FileService.getCommaSeparatedInputAsListInteger(FILE_NAME).forEach(input -> fish[input] = fish[input].add(BigInteger.ONE));
+        FileService.getCommaSeparatedInputAsListInteger(FILE_NAME)
+                .forEach(input -> fish[input] = fish[input].add(BigInteger.ONE));
         log.info("Initial state: {}", Arrays.toString(fish));
         for (int i = 1; i <= afterDays; i++) {
             BigInteger births = fish[0];
@@ -31,6 +32,8 @@ public class Day6 {
             fish[8] = births;
             log.info("After {} day{}: {}", StringUtils.leftPad(String.valueOf(i), 2), i == 1 ? " " : "s", Arrays.toString(fish));
         }
-        return Arrays.stream(fish).reduce(BigInteger::add).get();
+        return Arrays.stream(fish)
+                .reduce(BigInteger::add)
+                .get();
     }
 }

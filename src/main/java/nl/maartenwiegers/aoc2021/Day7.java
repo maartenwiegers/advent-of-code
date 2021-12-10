@@ -22,7 +22,8 @@ public class Day7 {
     public int getFuelConsumption(@PathVariable boolean part1) {
         crabsAtDistance = new int[ARRAY_SIZE];
         fuelCostsPerDistance = new int[ARRAY_SIZE];
-        FileService.getCommaSeparatedInputAsListInteger(FILE_NAME).forEach(input -> crabsAtDistance[input]++);
+        FileService.getCommaSeparatedInputAsListInteger(FILE_NAME)
+                .forEach(input -> crabsAtDistance[input]++);
         for (int startDistance = 0; startDistance < ARRAY_SIZE; startDistance++) {
             for (int destinationDistance = 0; destinationDistance < ARRAY_SIZE; destinationDistance++) {
                 int distance = Math.abs(startDistance - destinationDistance);
@@ -44,11 +45,13 @@ public class Day7 {
 
     private int getExponentialFuelConsumption(int countOfCrabs, int distance) {
         AtomicInteger fuel = new AtomicInteger();
-        IntStream.rangeClosed(0, distance).forEach(fuel::getAndAdd);
+        IntStream.rangeClosed(0, distance)
+                .forEach(fuel::getAndAdd);
         return countOfCrabs * fuel.get();
     }
 
     private OptionalInt getLowestFuelCost() {
-        return Arrays.stream(fuelCostsPerDistance).min();
+        return Arrays.stream(fuelCostsPerDistance)
+                .min();
     }
 }

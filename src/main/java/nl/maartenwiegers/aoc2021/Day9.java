@@ -8,11 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -29,7 +25,10 @@ public class Day9 {
     public int getSumOfRiskLevels(@PathVariable String filename) {
         setGrid(filename);
         setLowPoints();
-        return lowPointsCoordinates.stream().map(Coordinate::getDepth).mapToInt(Integer::intValue).sum() + lowPointsCoordinates.size();
+        return lowPointsCoordinates.stream()
+                .map(Coordinate::getDepth)
+                .mapToInt(Integer::intValue)
+                .sum() + lowPointsCoordinates.size();
     }
 
     @GetMapping("day9/part2/{filename}")
@@ -48,7 +47,8 @@ public class Day9 {
         List<String> input = FileService.getInputAsListString(String.format(FILE_NAME, filename));
         for (int y = 0; y < input.size(); y++) {
             for (int x = 0; x < gridWidth; x++) {
-                grid[y][x] = Integer.parseInt(input.get(y).substring(x, x + 1));
+                grid[y][x] = Integer.parseInt(input.get(y)
+                        .substring(x, x + 1));
             }
         }
         log.debug("Initialized grid: {}", Arrays.deepToString(grid));
@@ -60,7 +60,8 @@ public class Day9 {
             for (int x = 0; x < gridWidth; x++) {
                 int depth = grid[y][x];
                 log.debug("y {}, x {} has depth {}", y, x, depth);
-                if (getAdjacentPoints(y, x).stream().allMatch(d -> d.depth > depth)) {
+                if (getAdjacentPoints(y, x).stream()
+                        .allMatch(d -> d.depth > depth)) {
                     log.info("y {}, x {} has been counted as low point", y, x);
                     lowPointsCoordinates.add(new Coordinate(y, x, depth));
                 }
@@ -92,13 +93,18 @@ public class Day9 {
         basinSizes.sort(Integer::compareTo);
         Collections.reverse(basinSizes);
         log.info("Found basin sizes: {}", basinSizes);
-        return basinSizes.stream().limit(3).reduce(1, Math::multiplyExact);
+        return basinSizes.stream()
+                .limit(3)
+                .reduce(1, Math::multiplyExact);
     }
 
     private int getBasinSize(HashSet<Coordinate> basin) {
         List<Coordinate> coordinates;
         do {
-            coordinates = basin.stream().flatMap(b -> getAdjacentPoints(b.y, b.x).stream()).filter(p -> p.depth < 9).toList();
+            coordinates = basin.stream()
+                    .flatMap(b -> getAdjacentPoints(b.y, b.x).stream())
+                    .filter(p -> p.depth < 9)
+                    .toList();
         } while (basin.addAll(coordinates));
         return basin.size();
     }

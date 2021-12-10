@@ -57,7 +57,8 @@ public class Day2 {
 
     private List<Movement> getMovements() {
         List<Movement> movements = new ArrayList<>();
-        FileService.getInputAsListString(INPUT_FILE_NAME).forEach(movement -> movements.add(new Movement(getDirection(movement), getDistance(movement))));
+        FileService.getInputAsListString(INPUT_FILE_NAME)
+                .forEach(movement -> movements.add(new Movement(getDirection(movement), getDistance(movement))));
         return movements;
     }
 

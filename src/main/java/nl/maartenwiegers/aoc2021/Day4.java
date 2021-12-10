@@ -64,7 +64,10 @@ public class Day4 {
         inputs.removeIf(StringUtils::isBlank);
         for (int i = 0; i < inputs.size() - gridSize; i = i + gridSize) {
             List<String> rowsForThisCard = new ArrayList<>();
-            inputs.stream().skip(i).limit(gridSize).forEachOrdered(rowsForThisCard::add);
+            inputs.stream()
+                    .skip(i)
+                    .limit(gridSize)
+                    .forEachOrdered(rowsForThisCard::add);
             createdCards.add(getBingoCardFromInput(i, rowsForThisCard));
         }
         return createdCards;
@@ -111,7 +114,8 @@ public class Day4 {
     }
 
     private boolean areBingoCardsWithoutWinLeft() {
-        return bingoCards.stream().anyMatch(bingoCard -> !bingoCard.hasWin());
+        return bingoCards.stream()
+                .anyMatch(bingoCard -> !bingoCard.hasWin());
     }
 
     @Data
@@ -131,23 +135,31 @@ public class Day4 {
         private int gridSize;
 
         public int getSumOfUnmarkedNumbers() {
-            return bingoCardNumbers.stream().filter(bingoCardNumber -> !bingoCardNumber.isMarked()).mapToInt(BingoCardNumber::getNumber).sum();
+            return bingoCardNumbers.stream()
+                    .filter(bingoCardNumber -> !bingoCardNumber.isMarked())
+                    .mapToInt(BingoCardNumber::getNumber)
+                    .sum();
         }
 
         public boolean hasWin() {
-            if (bingoCardNumbers.stream().noneMatch(BingoCardNumber::isMarked)) {
+            if (bingoCardNumbers.stream()
+                    .noneMatch(BingoCardNumber::isMarked)) {
                 return false;
             }
 
             for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
-                if (bingoCardNumbers.stream().filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI).allMatch(BingoCardNumber::isMarked)) {
+                if (bingoCardNumbers.stream()
+                        .filter(bingoCardNumber -> bingoCardNumber.getRow() == finalI)
+                        .allMatch(BingoCardNumber::isMarked)) {
                     return true;
                 }
             }
             for (int i = 0; i < gridSize; i++) {
                 int finalI = i;
-                if (bingoCardNumbers.stream().filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI).allMatch(BingoCardNumber::isMarked)) {
+                if (bingoCardNumbers.stream()
+                        .filter(bingoCardNumber -> bingoCardNumber.getColumn() == finalI)
+                        .allMatch(BingoCardNumber::isMarked)) {
                     return true;
                 }
             }
@@ -155,7 +167,9 @@ public class Day4 {
         }
 
         public void markDrawnNumber(int drawnNumber) {
-            bingoCardNumbers.stream().filter(bingoCardNumber -> bingoCardNumber.number == drawnNumber).forEach(bingoCardNumber -> bingoCardNumber.setMarked(true));
+            bingoCardNumbers.stream()
+                    .filter(bingoCardNumber -> bingoCardNumber.number == drawnNumber)
+                    .forEach(bingoCardNumber -> bingoCardNumber.setMarked(true));
         }
     }
 }

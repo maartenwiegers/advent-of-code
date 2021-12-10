@@ -25,16 +25,17 @@ public class Day8 {
         lines.forEach(line -> {
             log.info("Line : {}", line);
             String outputValue = StringUtils.split(line, '|')[1];
-            Arrays.stream(StringUtils.split(outputValue, ' ')).forEach(signal -> {
-                if (signal.length() == 2 // digit 1
-                        || signal.length() == 3 // digit 7
-                        || signal.length() == 4 // digit 4
-                        || signal.length() == 7 // digit 8
-                ) {
-                    log.info("    Counted: {}", signal);
-                    count.getAndIncrement();
-                }
-            });
+            Arrays.stream(StringUtils.split(outputValue, ' '))
+                    .forEach(signal -> {
+                        if (signal.length() == 2 // digit 1
+                                || signal.length() == 3 // digit 7
+                                || signal.length() == 4 // digit 4
+                                || signal.length() == 7 // digit 8
+                        ) {
+                            log.info("    Counted: {}", signal);
+                            count.getAndIncrement();
+                        }
+                    });
         });
         return count.get();
     }
@@ -45,8 +46,14 @@ public class Day8 {
         int sum = 0;
         for (String line : lines) {
             String[] parts = line.split("\\|");
-            List<String> uniques = Arrays.stream(parts[0].trim().split(" ")).map(Day8::getSortedAlphabetically).toList();
-            List<String> output = Arrays.stream(parts[1].trim().split(" ")).map(Day8::getSortedAlphabetically).toList();
+            List<String> uniques = Arrays.stream(parts[0].trim()
+                            .split(" "))
+                    .map(Day8::getSortedAlphabetically)
+                    .toList();
+            List<String> output = Arrays.stream(parts[1].trim()
+                            .split(" "))
+                    .map(Day8::getSortedAlphabetically)
+                    .toList();
             List<String> numSegments = Arrays.asList(calcNumSegments(uniques));
             AtomicInteger num = new AtomicInteger();
             output.forEach(value -> {
@@ -77,23 +84,38 @@ public class Day8 {
         uniqueCopy.remove(numPatterns[8]);
 
         // Of all numbers with 6 segments (0,6,9), only 9 contains all segments of 4
-        numPatterns[9] = uniqueCopy.stream().filter(e -> e.length() == 6 && containsAll(e, numPatterns[4])).findFirst().get();
+        numPatterns[9] = uniqueCopy.stream()
+                .filter(e -> e.length() == 6 && containsAll(e, numPatterns[4]))
+                .findFirst()
+                .get();
         uniqueCopy.remove(numPatterns[9]);
 
         // only 0 and 6 have 6 segments. 0 contains all segments of 1, 6 does not
-        numPatterns[0] = uniqueCopy.stream().filter(e -> e.length() == 6 && containsAll(e, numPatterns[1])).findFirst().get();
+        numPatterns[0] = uniqueCopy.stream()
+                .filter(e -> e.length() == 6 && containsAll(e, numPatterns[1]))
+                .findFirst()
+                .get();
         uniqueCopy.remove(numPatterns[0]);
 
         // One 6 has a length of 6 segments now.
-        numPatterns[6] = uniqueCopy.stream().filter(e -> e.length() == 6).findFirst().get();
+        numPatterns[6] = uniqueCopy.stream()
+                .filter(e -> e.length() == 6)
+                .findFirst()
+                .get();
         uniqueCopy.remove(numPatterns[6]);
 
         // Only 2, 3 and 5 left. 3 contains all segments of 1
-        numPatterns[3] = uniqueCopy.stream().filter(e -> containsAll(e, numPatterns[1])).findFirst().get();
+        numPatterns[3] = uniqueCopy.stream()
+                .filter(e -> containsAll(e, numPatterns[1]))
+                .findFirst()
+                .get();
         uniqueCopy.remove(numPatterns[3]);
 
         // Only 2 and 5 left. 9 contains all segments of 5.
-        numPatterns[5] = uniqueCopy.stream().filter(e -> containsAll(numPatterns[9], e)).findFirst().get();
+        numPatterns[5] = uniqueCopy.stream()
+                .filter(e -> containsAll(numPatterns[9], e))
+                .findFirst()
+                .get();
         uniqueCopy.remove(numPatterns[5]);
 
         // Only 2 is left now

@@ -39,11 +39,12 @@ public class Day5 {
 
     private void setLines(boolean ignoreDiagonals) {
         lines.clear();
-        FileService.getInputAsListString(String.format(FILE_NAME, gridSize)).forEach(input -> {
-            String start = StringUtils.split(input, "->")[0].trim();
-            String end = StringUtils.split(input, "->")[1].trim();
-            lines.add(new Line(start.split(",")[0], start.split(",")[1], end.split(",")[0], end.split(",")[1]));
-        });
+        FileService.getInputAsListString(String.format(FILE_NAME, gridSize))
+                .forEach(input -> {
+                    String start = StringUtils.split(input, "->")[0].trim();
+                    String end = StringUtils.split(input, "->")[1].trim();
+                    lines.add(new Line(start.split(",")[0], start.split(",")[1], end.split(",")[0], end.split(",")[1]));
+                });
 
         if (ignoreDiagonals) {
             lines.removeIf(line -> Direction.DIAGONAL.equals(line.getDirection()));
@@ -97,7 +98,11 @@ public class Day5 {
     }
 
     private int getCountIntersections() {
-        return Arrays.stream(grid).mapToInt(row -> (int) Arrays.stream(row).filter(count -> count > 1).count()).sum();
+        return Arrays.stream(grid)
+                .mapToInt(row -> (int) Arrays.stream(row)
+                        .filter(count -> count > 1)
+                        .count())
+                .sum();
     }
 
     public enum Direction {

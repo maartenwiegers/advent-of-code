@@ -23,12 +23,23 @@ public class Day10 {
 
     @GetMapping("day10/part1/{filename}")
     public int getScore(@PathVariable String filename) {
-        return FileService.getInputAsListString(String.format(FILE_NAME, filename)).stream().map(this::getCleanString).map(this::getScoreForLine).mapToInt(Integer::intValue).sum();
+        return FileService.getInputAsListString(String.format(FILE_NAME, filename))
+                .stream()
+                .map(this::getCleanString)
+                .map(this::getScoreForLine)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     @GetMapping("day10/part2/{filename}")
     public long getAutocompleteScore(@PathVariable String filename) {
-        List<Long> autocompleteScores = FileService.getInputAsListString(String.format(FILE_NAME, filename)).stream().map(this::getCleanString).filter(line -> getScoreForLine(line) == 0).map(this::getAutocompleteScoreForLine).sorted().toList();
+        List<Long> autocompleteScores = FileService.getInputAsListString(String.format(FILE_NAME, filename))
+                .stream()
+                .map(this::getCleanString)
+                .filter(line -> getScoreForLine(line) == 0)
+                .map(this::getAutocompleteScoreForLine)
+                .sorted()
+                .toList();
         return autocompleteScores.get(autocompleteScores.size() / 2);
     }
 
@@ -45,7 +56,9 @@ public class Day10 {
 
     private long getAutocompleteScoreForLine(String line) {
         long score = 0;
-        List<Character> chars = new ArrayList<>(line.chars().mapToObj(e -> (char) e).toList());
+        List<Character> chars = new ArrayList<>(line.chars()
+                .mapToObj(e -> (char) e)
+                .toList());
         Collections.reverse(chars);
         for (Character aChar : chars) {
             char closingChar = PAIRS.get(aChar);
@@ -59,7 +72,10 @@ public class Day10 {
         int previousLength;
         do {
             previousLength = input.length();
-            input = input.replace("()", "").replace("[]", "").replace("{}", "").replace("<>", "");
+            input = input.replace("()", "")
+                    .replace("[]", "")
+                    .replace("{}", "")
+                    .replace("<>", "");
         } while (input.length() != previousLength);
         return input;
     }
