@@ -13,11 +13,11 @@ public class Day10Test {
     private final Day10 day10 = new Day10();
 
     private static Stream<Arguments> getPart1Arguments() {
-        return Stream.of(Arguments.of("example", 26397), Arguments.of("puzzleinput", 168417), Arguments.of("up1", 26448));
+        return Stream.of(Arguments.of("example", 26397), Arguments.of("puzzleinput", 168417));
     }
 
     private static Stream<Arguments> getPart2Arguments() {
-        return Stream.of(Arguments.of("example", 288957L), Arguments.of("puzzleinput", 2802519786L), Arguments.of("up1", 14841L));
+        return Stream.of(Arguments.of("example", 288957L), Arguments.of("puzzleinput", 2802519786L));
     }
 
     @ParameterizedTest
