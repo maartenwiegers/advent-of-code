@@ -24,6 +24,7 @@ public class Day10 {
         List<String> lines = new ArrayList<>(FileService.getInputAsListString(String.format(FILE_NAME, filename)));
         return lines
                 .stream()
+                .map(this::getCleanString)
                 .map(this::getScoreForLine)
                 .mapToInt(Integer::intValue)
                 .sum();
@@ -44,6 +45,17 @@ public class Day10 {
             }
         }
         return 0;
+    }
+
+    private String getCleanString(String input) {
+        log.debug("Cleaning string {}", input);
+        int previousLength;
+        do {
+            previousLength = input.length();
+            input = input.replace("()", "").replace("[]", "").replace("{}", "").replace("<>", "");
+        } while (input.length() != previousLength);
+        log.debug("Cleaned: {}", input);
+        return input;
     }
 
     private List<Character> getNextCharactersExpected(char current) {
