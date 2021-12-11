@@ -47,9 +47,7 @@ public class Day11 {
                 setIncreasedEnergy(y, x);
             }
         }
-
         int countOfFlashes = 0;
-
         for (Octopus[] line : octopi) {
             for (Octopus octopus : line) {
                 if (octopus.hasFlashedThisStep) {
@@ -63,12 +61,14 @@ public class Day11 {
     }
 
     private void setIncreasedEnergy(int y, int x) {
-        if (x >= 0 && y >= 0 && y < octopi.length && x < octopi[y].length) {
+        try {
             Octopus octopus = octopi[y][x];
             octopus.energy++;
             if (octopus.energy > 9 && !octopus.hasFlashedThisStep) {
                 setFlash(y, x);
             }
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+
         }
     }
 
@@ -97,7 +97,7 @@ public class Day11 {
 
     @Data
     @AllArgsConstructor
-    private class Octopus {
+    private static class Octopus {
         int energy;
         boolean hasFlashedThisStep;
     }
