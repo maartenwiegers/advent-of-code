@@ -18,9 +18,9 @@ public class Day11 {
     private Octopus[][] octopi = new Octopus[10][10];
 
     @GetMapping("day11/part1/{filename}/{afterSteps}")
-    public long getCountOfFlashes(@PathVariable String filename, @PathVariable int afterSteps) {
+    public int getCountOfFlashes(@PathVariable String filename, @PathVariable int afterSteps) {
         initializeOctopi(filename);
-        long countOfFlashes = 0;
+        int countOfFlashes = 0;
         for (int i = 0; i < afterSteps; i++) {
             countOfFlashes += getCountOfFlashesForStep();
         }
@@ -29,10 +29,10 @@ public class Day11 {
 
 
     @GetMapping("day11/part2/{filename}")
-    public long getWhenAllOctopiFlashSimultaneously(@PathVariable String filename) {
+    public int getWhenAllOctopiFlashSimultaneously(@PathVariable String filename) {
         initializeOctopi(filename);
         int countOfOctopi = octopi.length * octopi[0].length;
-        long countOfFlashes = 0;
+        int countOfFlashes = 0;
         int countStep = 0;
         while (countOfFlashes != countOfOctopi) {
             countOfFlashes = getCountOfFlashesForStep();
@@ -41,7 +41,7 @@ public class Day11 {
         return countStep;
     }
 
-    private long getCountOfFlashesForStep() {
+    private int getCountOfFlashesForStep() {
         for (int y = 0; y < octopi.length; y++) {
             for (int x = 0; x < octopi[y].length; x++) {
                 setIncreasedEnergy(y, x);
