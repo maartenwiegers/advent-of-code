@@ -18,7 +18,17 @@ public class Day11Test {
         assertEquals(expected, day11.getCountOfFlashes(filename, afterSteps));
     }
 
+    @ParameterizedTest
+    @MethodSource("getPart2Arguments")
+    public void shouldGetCorrectAnswersForDay11Part2(String filename, int expected) {
+        assertEquals(expected, day11.getWhenAllOctopiFlashSimultaneously(filename));
+    }
+
     private static Stream<Arguments> getPart1Arguments() {
         return Stream.of(Arguments.of("example", 1, 0), Arguments.of("example", 2, 35), Arguments.of("example", 10, 204), Arguments.of("example", 100, 1656), Arguments.of("puzzleinput", 100, 1588));
+    }
+
+    private static Stream<Arguments> getPart2Arguments() {
+        return Stream.of(Arguments.of("example", 195), Arguments.of("puzzleinput", 517));
     }
 }

@@ -17,21 +17,28 @@ public class Day11 {
     private static final String FILE_NAME = "input/11-%s.txt";
     private Octopus[][] octopi = new Octopus[10][10];
 
-    @GetMapping("day11/par1/{filename}/{afterSteps}")
+    @GetMapping("day11/part1/{filename}/{afterSteps}")
     public long getCountOfFlashes(@PathVariable String filename, @PathVariable int afterSteps) {
-        octopi = new Octopus[10][10];
-        List<String> lines = FileService.getInputAsListString(String.format(FILE_NAME, filename));
-        for (int y = 0; y < lines.size(); y++) {
-            String line = lines.get(y);
-            for (int x = 0; x < line.length(); x++) {
-                octopi[y][x] = new Octopus(line.charAt(x) - 48, false);
-            }
-        }
+        initializeOctopi(filename);
         long countOfFlashes = 0;
         for (int i = 0; i < afterSteps; i++) {
             countOfFlashes += getCountOfFlashesForStep();
         }
         return countOfFlashes;
+    }
+
+
+    @GetMapping("day11/part2/{filename}")
+    public long getWhenAllOctopiFlashSimultaneously(@PathVariable String filename) {
+        initializeOctopi(filename);
+        int countOfOctopi = octopi.length * octopi[0].length;
+        long countOfFlashes = 0;
+        int countStep = 0;
+        while (countOfFlashes != countOfOctopi) {
+            countOfFlashes = getCountOfFlashesForStep();
+            countStep++;
+        }
+        return countStep;
     }
 
     private long getCountOfFlashesForStep() {
@@ -75,6 +82,17 @@ public class Day11 {
         setIncreasedEnergy(y - 1, x + 1);
         setIncreasedEnergy(y - 1, x);
         setIncreasedEnergy(y - 1, x - 1);
+    }
+
+    private void initializeOctopi(String filename) {
+        octopi = new Octopus[10][10];
+        List<String> lines = FileService.getInputAsListString(String.format(FILE_NAME, filename));
+        for (int y = 0; y < lines.size(); y++) {
+            String line = lines.get(y);
+            for (int x = 0; x < line.length(); x++) {
+                octopi[y][x] = new Octopus(line.charAt(x) - 48, false);
+            }
+        }
     }
 
     @Data
