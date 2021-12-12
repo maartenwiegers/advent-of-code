@@ -20,20 +20,22 @@ import java.util.Set;
 public class Day12 {
 
     private static final String FILE_NAME = "input/12-%s.txt";
+    private static final String START = "start";
+    private static final String END = "end";
     private Map<String, Cave> caveMap;
 
     @GetMapping("day12/{filename}/{allowVisitToSmallCaveTwice}")
     public int getCountOfPaths(@PathVariable String filename, @PathVariable boolean allowVisitToSmallCaveTwice) {
         initializeCaveMap(filename);
-        Cave start = caveMap.get("start");
-        start.connections.forEach(cave -> cave.connections.removeIf(cave1 -> "start".equals(cave1.name)));
+        Cave start = caveMap.get(START);
+        start.connections.forEach(cave -> cave.connections.removeIf(cave1 -> START.equals(cave1.name)));
         return getPaths(start, List.of(start), allowVisitToSmallCaveTwice, false);
     }
 
     private int getPaths(Cave startAt, List<Cave> currentPath, boolean allowVisitToSmallCaveTwice, boolean visitedSmallCaveTwice) {
         List<Cave> path = List.copyOf(currentPath);
         int countRoutes = 0;
-        if ("end".equals(startAt.name)) {
+        if (END.equals(startAt.name)) {
             return 1;
         } else {
             for (Cave adjacentCave : startAt.connections) {
