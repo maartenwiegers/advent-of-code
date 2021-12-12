@@ -13,21 +13,21 @@ public class Day12Test {
 
     @ParameterizedTest
     @MethodSource("getPart1Arguments")
-    public void shouldGetCorrectAnswersForDay12Part1(String filename, int expected) {
-        assertEquals(expected, day12.getCountOfPaths(filename));
+    public void shouldGetCorrectAnswersForDay12Part1(String filename, boolean allowVisitToSmallCaveTwice, int expected) {
+        assertEquals(expected, day12.getCountOfPaths(filename, allowVisitToSmallCaveTwice));
     }
 
     @ParameterizedTest
     @MethodSource("getPart2Arguments")
-    public void shouldGetCorrectAnswersForDay12Part2(String filename, int expected) {
-        assertEquals(expected, day12.getCountOfPathsVisitSmallTwice(filename));
+    public void shouldGetCorrectAnswersForDay12Part2(String filename, boolean allowVisitToSmallCaveTwice, int expected) {
+        assertEquals(expected, day12.getCountOfPaths(filename, allowVisitToSmallCaveTwice));
     }
 
     private static Stream<Arguments> getPart1Arguments() {
-        return Stream.of(Arguments.of("example1", 10), Arguments.of("example2", 19), Arguments.of("example3", 226), Arguments.of("puzzleinput", 4495));
+        return Stream.of(Arguments.of("example1", false, 10), Arguments.of("example2", false, 19), Arguments.of("example3", false, 226), Arguments.of("puzzleinput", false, 4495));
     }
 
     private static Stream<Arguments> getPart2Arguments() {
-        return Stream.of(Arguments.of("example1", 36), Arguments.of("example2", 103), Arguments.of("example3", 3509), Arguments.of("puzzleinput", 131254));
+        return Stream.of(Arguments.of("example1", true, 36), Arguments.of("example2", true, 103), Arguments.of("example3", true, 3509), Arguments.of("puzzleinput", true, 131254));
     }
 }

@@ -22,46 +22,15 @@ public class Day12 {
     private static final String FILE_NAME = "input/12-%s.txt";
     private Map<String, Cave> caveMap;
 
-    @GetMapping("day12/part1/{filename}")
-    public int getCountOfPaths(@PathVariable String filename) {
-        initializeCaveMap(filename);
-        Cave start = caveMap.get("start");
-        return getPaths(start, List.of(start));
-    }
-
-    @GetMapping("day12/part2/{filename}")
-    public int getCountOfPathsVisitSmallTwice(@PathVariable String filename) {
+    @GetMapping("day12/{filename}/{allowVisitToSmallCaveTwice}")
+    public int getCountOfPaths(@PathVariable String filename, @PathVariable boolean allowVisitToSmallCaveTwice) {
         initializeCaveMap(filename);
         Cave start = caveMap.get("start");
         start.connections.forEach(cave -> cave.connections.removeIf(cave1 -> "start".equals(cave1.name)));
-        return getPaths(start, List.of(start), false);
+        return getPaths(start, List.of(start), allowVisitToSmallCaveTwice, false);
     }
 
-    private int getPaths(Cave startAt, List<Cave> currentPath) {
-        List<Cave> path = List.copyOf(currentPath);
-        int countRoutes = 0;
-
-        if ("end".equals(startAt.name)) {
-            return 1;
-        } else {
-            for (Cave adjacentCave : startAt.connections) {
-                if (adjacentCave.large) {
-                    List<Cave> newPath = new ArrayList<>(path);
-                    newPath.add(adjacentCave);
-                    countRoutes += getPaths(adjacentCave, newPath);
-                } else {
-                    if (!currentPath.contains(adjacentCave)) {
-                        List<Cave> newPath = new ArrayList<>(path);
-                        newPath.add(adjacentCave);
-                        countRoutes += getPaths(adjacentCave, newPath);
-                    }
-                }
-            }
-        }
-        return countRoutes;
-    }
-
-    private int getPaths(Cave startAt, List<Cave> currentPath, boolean visitedSmallCaveTwice) {
+    private int getPaths(Cave startAt, List<Cave> currentPath, boolean allowVisitToSmallCaveTwice, boolean visitedSmallCaveTwice) {
         List<Cave> path = List.copyOf(currentPath);
         int countRoutes = 0;
         if ("end".equals(startAt.name)) {
@@ -71,17 +40,17 @@ public class Day12 {
                 if (adjacentCave.large) {
                     List<Cave> newPath = new ArrayList<>(path);
                     newPath.add(adjacentCave);
-                    countRoutes += getPaths(adjacentCave, newPath, visitedSmallCaveTwice);
+                    countRoutes += getPaths(adjacentCave, newPath, allowVisitToSmallCaveTwice, visitedSmallCaveTwice);
                 } else {
                     if (!currentPath.contains(adjacentCave)) {
                         List<Cave> newPath = new ArrayList<>(path);
                         newPath.add(adjacentCave);
-                        countRoutes += getPaths(adjacentCave, newPath, visitedSmallCaveTwice);
+                        countRoutes += getPaths(adjacentCave, newPath, allowVisitToSmallCaveTwice, visitedSmallCaveTwice);
                     } else {
-                        if (!visitedSmallCaveTwice) {
+                        if (allowVisitToSmallCaveTwice && !visitedSmallCaveTwice) {
                             List<Cave> newPath = new ArrayList<>(path);
                             newPath.add(adjacentCave);
-                            countRoutes += getPaths(adjacentCave, newPath, true);
+                            countRoutes += getPaths(adjacentCave, newPath, true, true);
                         }
                     }
                 }
