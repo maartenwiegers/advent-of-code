@@ -24,7 +24,7 @@ public class Day13 {
 
     @GetMapping("day13/{filename}/{numberOfFolds}")
     public long getCountOfVisibleDots(@PathVariable String filename, @PathVariable int numberOfFolds) {
-        initializeGrid(filename);
+        initializePoints(filename);
         initializeFoldingInstructions(filename);
         simulateFolding(numberOfFolds);
         return getCountOfVisibleDots();
@@ -32,13 +32,13 @@ public class Day13 {
 
     @GetMapping("day13/{filename}/{numberOfFolds}/string")
     public String getOutputAsString(@PathVariable String filename, @PathVariable int numberOfFolds) {
-        initializeGrid(filename);
+        initializePoints(filename);
         initializeFoldingInstructions(filename);
         simulateFolding(numberOfFolds);
         return getOutputAsString();
     }
 
-    private void initializeGrid(String filename) {
+    private void initializePoints(String filename) {
         points = new HashSet<>();
         FileService.getInputAsListString(String.format(FILE_NAME, filename))
                 .stream()
@@ -56,9 +56,7 @@ public class Day13 {
         FileService.getInputAsListString(String.format(FILE_NAME, filename))
                 .stream()
                 .filter(line -> line.contains("fold along"))
-                .map(line -> line.replace("fold along ", "")
-                        .replace("=", ""))
-                .forEach(line -> foldingInstructions.add(new FoldingInstruction(line.charAt(0), Integer.parseInt(line.substring(1)))));
+                .forEach(line -> foldingInstructions.add(new FoldingInstruction(line.charAt(11) == 'y' ? FoldDirection.HORIZONTAL : FoldDirection.VERTICAL, Integer.parseInt(line.substring(13)))));
         log.info("Initialized folding instructions: {}", foldingInstructions);
     }
 
@@ -69,7 +67,7 @@ public class Day13 {
     }
 
     private void simulateFold(FoldingInstruction foldingInstruction) {
-        if (foldingInstruction.direction == 'y') {
+        if (foldingInstruction.direction.equals(FoldDirection.HORIZONTAL)) {
             simulateHorizontalFold(foldingInstruction);
         } else {
             simulateVerticalFold(foldingInstruction);
@@ -105,11 +103,17 @@ public class Day13 {
     private String getOutputAsString() {
         StringBuilder output = new StringBuilder();
         output.append('\n');
-        int maxY = points.stream().mapToInt(Point::getY).max().getAsInt();
-        int maxX = points.stream().mapToInt(Point::getX).max().getAsInt();
-        for(int y = 0; y <= maxY; y++){
-            for(int x = 0; x <= maxX; x++) {
-                if(points.contains(new Point(y, x))) {
+        int maxY = points.stream()
+                .mapToInt(Point::getY)
+                .max()
+                .getAsInt();
+        int maxX = points.stream()
+                .mapToInt(Point::getX)
+                .max()
+                .getAsInt();
+        for (int y = 0; y <= maxY; y++) {
+            for (int x = 0; x <= maxX; x++) {
+                if (points.contains(new Point(y, x))) {
                     output.append("#");
                 } else {
                     output.append(" ");
@@ -121,10 +125,14 @@ public class Day13 {
         return output.toString();
     }
 
+    private enum FoldDirection {
+        HORIZONTAL, VERTICAL
+    }
+
     @Data
     @AllArgsConstructor
     private static class FoldingInstruction {
-        char direction;
+        FoldDirection direction;
         int start;
     }
 
