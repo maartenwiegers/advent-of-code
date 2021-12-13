@@ -106,11 +106,11 @@ public class Day13 {
         int maxY = points.stream()
                 .mapToInt(Point::getY)
                 .max()
-                .getAsInt();
+                .orElse(0);
         int maxX = points.stream()
                 .mapToInt(Point::getX)
                 .max()
-                .getAsInt();
+                .orElse(0);
         for (int y = 0; y <= maxY; y++) {
             for (int x = 0; x <= maxX; x++) {
                 if (points.contains(new Point(y, x))) {
