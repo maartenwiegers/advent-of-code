@@ -9,38 +9,46 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
 public class Day13 {
 
     private static final String FILE_NAME = "input/13-%s.txt";
-    private int gridSize = 15;
-    private char[][] grid;
     private List<FoldingInstruction> foldingInstructions;
+    private HashSet<Point> points;
 
-    @GetMapping("day13/part1/{filename}/{gridSize}/{numberOfFolds}")
-    public int getCountOfVisibleDots(@PathVariable String filename, @PathVariable int gridSize, @PathVariable int numberOfFolds) {
-        this.gridSize = gridSize;
+    @GetMapping("day13/{filename}/{numberOfFolds}")
+    public long getCountOfVisibleDots(@PathVariable String filename, @PathVariable int numberOfFolds) {
         initializeGrid(filename);
         initializeFoldingInstructions(filename);
         simulateFolding(numberOfFolds);
         return getCountOfVisibleDots();
     }
 
+    @GetMapping("day13/{filename}/{numberOfFolds}/string")
+    public String getOutputAsString(@PathVariable String filename, @PathVariable int numberOfFolds) {
+        initializeGrid(filename);
+        initializeFoldingInstructions(filename);
+        simulateFolding(numberOfFolds);
+        return getOutputAsString();
+    }
+
     private void initializeGrid(String filename) {
-        grid = new char[gridSize][gridSize];
+        points = new HashSet<>();
         FileService.getInputAsListString(String.format(FILE_NAME, filename))
                 .stream()
                 .filter(line -> line.contains(","))
                 .forEach(line -> {
                     int x = Integer.parseInt(line.split(",")[0]);
                     int y = Integer.parseInt(line.split(",")[1]);
-                    grid[y][x] = '#';
+                    points.add(new Point(y, x));
                 });
-        log.info("Initialized grid: {}", Arrays.deepToString(grid));
+        log.info("Initialized grid: {}", points);
     }
 
     private void initializeFoldingInstructions(String filename) {
@@ -68,44 +76,49 @@ public class Day13 {
         }
     }
 
-    private int getCountOfVisibleDots() {
+    private long getCountOfVisibleDots() {
+        return points.size();
+    }
+
+    private void simulateHorizontalFold(FoldingInstruction foldingInstruction) {
+        HashSet<Point> pointsToRemove = new HashSet<>();
+        Set<Point> pointsToAdd = points.stream()
+                .filter(point -> point.y > foldingInstruction.start)
+                .peek(pointsToRemove::add)
+                .map(point -> new Point(foldingInstruction.start - (point.y - foldingInstruction.start), point.x))
+                .collect(Collectors.toSet());
+        points.removeAll(pointsToRemove);
+        points.addAll(pointsToAdd);
+    }
+
+    private void simulateVerticalFold(FoldingInstruction foldingInstruction) {
+        HashSet<Point> pointsToRemove = new HashSet<>();
+        Set<Point> pointsToAdd = points.stream()
+                .filter(point -> point.x > foldingInstruction.start)
+                .peek(pointsToRemove::add)
+                .map(point -> new Point(point.y, foldingInstruction.start - (point.x - foldingInstruction.start)))
+                .collect(Collectors.toSet());
+        points.removeAll(pointsToRemove);
+        points.addAll(pointsToAdd);
+    }
+
+    private String getOutputAsString() {
         StringBuilder output = new StringBuilder();
-        int countDots = 0;
-        for (int y = 0; y < gridSize; y++) {
-            for (int x = 0; x < gridSize; x++) {
-                output.append(grid[y][x]);
-                if (grid[y][x] == '#') {
-                    countDots++;
+        output.append('\n');
+        int maxY = points.stream().mapToInt(Point::getY).max().getAsInt();
+        int maxX = points.stream().mapToInt(Point::getX).max().getAsInt();
+        for(int y = 0; y <= maxY; y++){
+            for(int x = 0; x <= maxX; x++) {
+                if(points.contains(new Point(y, x))) {
+                    output.append("#");
+                } else {
+                    output.append(" ");
                 }
             }
             output.append('\n');
         }
         log.info(output.toString());
-        return countDots;
-    }
-
-    private void simulateHorizontalFold(FoldingInstruction foldingInstruction) {
-        for (int y = foldingInstruction.start + 1; y < gridSize; y++) {
-            for (int x = 0; x < gridSize; x++) {
-                if (grid[y][x] == '#') {
-                    int newY = gridSize - y - 1;
-                    grid[newY][x] = '#';
-                    grid[y][x] = '.';
-                }
-            }
-        }
-    }
-
-    private void simulateVerticalFold(FoldingInstruction foldingInstruction) {
-        for (int x = foldingInstruction.start + 1; x < gridSize; x++) {
-            for(int y = 0; y < gridSize; y++) {
-                if(grid[y][x] == '#') {
-                    int newX = gridSize - x - 1;
-                    grid[y][newX] = '#';
-                    grid[y][x] = '.';
-                }
-            }
-        }
+        return output.toString();
     }
 
     @Data
@@ -113,5 +126,12 @@ public class Day13 {
     private static class FoldingInstruction {
         char direction;
         int start;
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class Point {
+        int y;
+        int x;
     }
 }
