@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc2021.commons.FileService;
+import nl.maartenwiegers.aoc2021.commons.Direction;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -103,10 +104,6 @@ public class Day5 {
                         .filter(count -> count > 1)
                         .count())
                 .sum();
-    }
-
-    public enum Direction {
-        HORIZONTAL, VERTICAL, DIAGONAL
     }
 
     @Data

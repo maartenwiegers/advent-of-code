@@ -1,8 +1,7 @@
 package nl.maartenwiegers.aoc2021;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import nl.maartenwiegers.aoc2021.commons.CoordinateWithDepth;
 import nl.maartenwiegers.aoc2021.commons.FileService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +23,14 @@ public class Day9 {
     private int gridHeight = 5;
 
     private int[][] grid;
-    private List<Coordinate> lowPointsCoordinates;
+    private List<CoordinateWithDepth> lowPointsCoordinates;
 
     @GetMapping("day9/part1/{filename}")
     public int getSumOfRiskLevels(@PathVariable String filename) {
         setGrid(filename);
         setLowPoints();
         return lowPointsCoordinates.stream()
-                .map(Coordinate::getDepth)
+                .map(CoordinateWithDepth::getDepth)
                 .mapToInt(Integer::intValue)
                 .sum() + lowPointsCoordinates.size();
     }
@@ -66,28 +65,28 @@ public class Day9 {
                 int depth = grid[y][x];
                 log.debug("y {}, x {} has depth {}", y, x, depth);
                 if (getAdjacentPoints(y, x).stream()
-                        .allMatch(d -> d.depth > depth)) {
+                        .allMatch(d -> d.getDepth() > depth)) {
                     log.info("y {}, x {} has been counted as low point", y, x);
-                    lowPointsCoordinates.add(new Coordinate(y, x, depth));
+                    lowPointsCoordinates.add(new CoordinateWithDepth(y, x, depth));
                 }
             }
         }
         log.debug("Initialized lowPointsCoordinates {}", lowPointsCoordinates);
     }
 
-    private List<Coordinate> getAdjacentPoints(int y, int x) {
-        List<Coordinate> adjacentPoints = new ArrayList<>();
+    private List<CoordinateWithDepth> getAdjacentPoints(int y, int x) {
+        List<CoordinateWithDepth> adjacentPoints = new ArrayList<>();
         if (x > 0) {
-            adjacentPoints.add(new Coordinate(y, x - 1, grid[y][x - 1]));
+            adjacentPoints.add(new CoordinateWithDepth(y, x - 1, grid[y][x - 1]));
         }
         if (x < gridWidth - 1) {
-            adjacentPoints.add(new Coordinate(y, x + 1, grid[y][x + 1]));
+            adjacentPoints.add(new CoordinateWithDepth(y, x + 1, grid[y][x + 1]));
         }
         if (y > 0) {
-            adjacentPoints.add(new Coordinate(y - 1, x, grid[y - 1][x]));
+            adjacentPoints.add(new CoordinateWithDepth(y - 1, x, grid[y - 1][x]));
         }
         if (y < gridHeight - 1) {
-            adjacentPoints.add(new Coordinate(y + 1, x, grid[y + 1][x]));
+            adjacentPoints.add(new CoordinateWithDepth(y + 1, x, grid[y + 1][x]));
         }
         return adjacentPoints;
     }
@@ -103,22 +102,14 @@ public class Day9 {
                 .reduce(1, Math::multiplyExact);
     }
 
-    private int getBasinSize(HashSet<Coordinate> basin) {
-        List<Coordinate> coordinates;
+    private int getBasinSize(HashSet<CoordinateWithDepth> basin) {
+        List<CoordinateWithDepth> coordinates;
         do {
             coordinates = basin.stream()
-                    .flatMap(b -> getAdjacentPoints(b.y, b.x).stream())
-                    .filter(p -> p.depth < 9)
+                    .flatMap(b -> getAdjacentPoints(b.getY(), b.getX()).stream())
+                    .filter(p -> p.getDepth() < 9)
                     .toList();
         } while (basin.addAll(coordinates));
         return basin.size();
-    }
-
-    @Data
-    @AllArgsConstructor
-    private static class Coordinate {
-        int y;
-        int x;
-        int depth;
     }
 }
