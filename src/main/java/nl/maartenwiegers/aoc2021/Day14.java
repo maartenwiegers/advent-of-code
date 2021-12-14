@@ -68,7 +68,6 @@ public class Day14 {
                     .orElseThrow()
                     .getInsert();
             polymer.add(i + 1, insert);
-            //log.debug("Added {} at index {}", insert, i);
             i++;
             end++;
         }

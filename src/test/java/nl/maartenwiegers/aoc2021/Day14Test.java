@@ -29,6 +29,6 @@ public class Day14Test {
     }
 
     private static Stream<Arguments> getScoreArguments() {
-        return Stream.of(Arguments.of("example", 10, 1588), Arguments.of("puzzleinput", 10, 2740), Arguments.of("example", 19, 2188189693529L));
+        return Stream.of(Arguments.of("example", 10, 1588), Arguments.of("puzzleinput", 10, 2740), Arguments.of("example", 40, 2188189693529L));
     }
 }
