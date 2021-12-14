@@ -20,7 +20,7 @@ public class Day14Test {
 
     @ParameterizedTest
     @MethodSource("getScoreArguments")
-    public void shouldGetCorrectScore(String filename, int numberOfSteps, int expected) {
+    public void shouldGetCorrectScore(String filename, int numberOfSteps, long expected) {
         assertEquals(expected, day14.getScore(filename, numberOfSteps));
     }
 
@@ -29,6 +29,6 @@ public class Day14Test {
     }
 
     private static Stream<Arguments> getScoreArguments() {
-        return Stream.of(Arguments.of("example", 10, 1588), Arguments.of("puzzleinput", 10, 2740));
+        return Stream.of(Arguments.of("example", 10, 1588), Arguments.of("puzzleinput", 10, 2740), Arguments.of("example", 19, 2188189693529L));
     }
 }

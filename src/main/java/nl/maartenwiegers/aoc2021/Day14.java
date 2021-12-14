@@ -28,7 +28,7 @@ public class Day14 {
     }
 
     @GetMapping("day14/score/{filename}/{steps}")
-    public int getScore(@PathVariable String filename, @PathVariable int steps) {
+    public long getScore(@PathVariable String filename, @PathVariable int steps) {
         simulatePolymer(filename, steps);
         return getScore();
     }
@@ -37,6 +37,7 @@ public class Day14 {
         initialize(filename);
         for (int i = 1; i <= steps; i++) {
             handleInsertion();
+            log.info("Finished step {}", i);
         }
     }
 
@@ -67,28 +68,28 @@ public class Day14 {
                     .orElseThrow()
                     .getInsert();
             polymer.add(i + 1, insert);
-            log.debug("Added {} at index {}", insert, i);
+            //log.debug("Added {} at index {}", insert, i);
             i++;
             end++;
         }
     }
 
-    private int getScore() {
+    private long getScore() {
         List<String> distinctCharacters = polymer.stream()
                 .distinct()
                 .toList();
-        List<Integer> characterCounts = new ArrayList<>();
+        List<Long> characterCounts = new ArrayList<>();
         for (String dc : distinctCharacters) {
-            characterCounts.add((int) polymer.stream()
+            characterCounts.add(polymer.stream()
                     .filter(p -> p.equals(dc))
                     .count());
         }
-        int max = characterCounts.stream()
-                .mapToInt(Integer::valueOf)
+        long max = characterCounts.stream()
+                .mapToLong(Long::longValue)
                 .max()
                 .orElse(0);
-        int min = characterCounts.stream()
-                .mapToInt(Integer::valueOf)
+        long min = characterCounts.stream()
+                .mapToLong(Long::longValue)
                 .min()
                 .orElse(0);
         return max - min;
