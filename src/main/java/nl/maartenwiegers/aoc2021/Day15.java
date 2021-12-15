@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,16 +29,64 @@ public class Day15 {
     @GetMapping("day15/part1/{filename}/{gridSize}")
     public long getRiskOfShortestPath(@PathVariable String filename, @PathVariable int gridSize) {
         initialize(filename);
-        Coordinate startAt = new Coordinate(0, 0);
-        risksToCoordinates.put(startAt, 0L);
-        Coordinate destination = new Coordinate(gridSize - 1, gridSize - 1);
-        calculateShortestPath(startAt);
-        return risksToCoordinates.get(destination);
+        calculate();
+        return risksToCoordinates.get(new Coordinate(gridSize - 1, gridSize - 1));
+    }
+
+    @GetMapping("day15/part2/{filename}/{gridSize}")
+    public long getRiskOfShortestPathOnFullGrid(@PathVariable String filename, @PathVariable int gridSize) {
+        initializeFullGrid(filename);
+        calculate();
+        return risksToCoordinates.get(new Coordinate(gridSize - 1, gridSize - 1));
     }
 
     private void initialize(String filename) {
         risksToCoordinates.clear();
         List<String> input = FileService.getInputAsListString(String.format(FILE_NAME, filename));
+        setRisksToCoordinates(input);
+    }
+
+    private void initializeFullGrid(String filename) {
+        risksToCoordinates.clear();
+        List<String> input = FileService.getInputAsListString(String.format(FILE_NAME, filename));
+        List<String> newLines = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            for (String line : input) {
+                int finalI = i;
+                newLines.add(line.chars()
+                        .map(c -> {
+                            int n = c + finalI;
+                            if (n > '9') {
+                                n -= 9;
+                            }
+                            return n;
+                        })
+                        .mapToObj(Character::toString)
+                        .collect(Collectors.joining()));
+            }
+        }
+        List<String> newInput = new ArrayList<>();
+        for (String line : newLines) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 5; i++) {
+                int finalI = i;
+                sb.append(line.chars()
+                        .map(c -> {
+                            int n = c + finalI;
+                            if (n > '9') {
+                                n -= 9;
+                            }
+                            return n;
+                        })
+                        .mapToObj(Character::toString)
+                        .collect(Collectors.joining()));
+            }
+            newInput.add(sb.toString());
+        }
+        setRisksToCoordinates(newInput);
+    }
+
+    private void setRisksToCoordinates(List<String> input) {
         for (int y = 0; y < input.size(); y++) {
             String line = input.get(y);
             for (int x = 0; x < line.length(); x++) {
@@ -49,6 +98,12 @@ public class Day15 {
         }
         log.info("Initialized risksToCoordinates: {}", risksToCoordinates);
         log.info("Initialized riskAtCoordinate: {}", riskAtCoordinate);
+    }
+
+    private void calculate() {
+        Coordinate startAt = new Coordinate(0, 0);
+        risksToCoordinates.put(startAt, 0L);
+        calculateShortestPath(startAt);
     }
 
     private void calculateShortestPath(Coordinate start) {
@@ -78,6 +133,5 @@ public class Day15 {
                     .forEach(todo::offer);
             unvisited.remove(current);
         }
-
     }
 }
