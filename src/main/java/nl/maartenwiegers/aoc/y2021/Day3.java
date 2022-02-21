@@ -2,13 +2,10 @@ package nl.maartenwiegers.aoc.y2021;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
 @Slf4j
 public class Day3 {
 
@@ -16,14 +13,12 @@ public class Day3 {
     private final int[] countZeroes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     private final int[] countOnes = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    @GetMapping("day3/part1")
     public int getPowerConsumption() {
         FileService.getInputAsListString(INPUT_FILE_NAME)
                 .forEach(this::countCharacters);
         return getGammaRate() * getEpsilonRate();
     }
 
-    @GetMapping("day3/part2")
     public int getLifeSupportRating() {
         return getOxygenGeneratorRating() * getCo2ScrubberRating();
     }

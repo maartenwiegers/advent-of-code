@@ -3,9 +3,6 @@ package nl.maartenwiegers.aoc.y2021;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.Coordinate;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,7 +15,6 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RestController
 @Slf4j
 public class Day15 {
 
@@ -26,15 +22,13 @@ public class Day15 {
     private final Map<Coordinate, Long> risksToCoordinates = new HashMap<>();
     private final Map<Coordinate, Integer> riskAtCoordinate = new HashMap<>();
 
-    @GetMapping("day15/part1/{filename}/{gridSize}")
-    public long getRiskOfShortestPath(@PathVariable String filename, @PathVariable int gridSize) {
+    public long getRiskOfShortestPath(String filename, int gridSize) {
         initialize(filename);
         calculate();
         return risksToCoordinates.get(new Coordinate(gridSize - 1, gridSize - 1));
     }
 
-    @GetMapping("day15/part2/{filename}/{gridSize}")
-    public long getRiskOfShortestPathOnFullGrid(@PathVariable String filename, @PathVariable int gridSize) {
+    public long getRiskOfShortestPathOnFullGrid(String filename, int gridSize) {
         initializeFullGrid(filename);
         calculate();
         return risksToCoordinates.get(new Coordinate(gridSize - 1, gridSize - 1));

@@ -4,21 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
 @Slf4j
 public class Day11 {
 
     private static final String FILE_NAME = "input/y2021/11-%s.txt";
     private Octopus[][] octopi = new Octopus[10][10];
 
-    @GetMapping("day11/part1/{filename}/{afterSteps}")
-    public int getCountOfFlashes(@PathVariable String filename, @PathVariable int afterSteps) {
+    public int getCountOfFlashes(String filename, int afterSteps) {
         initializeOctopi(filename);
         int countOfFlashes = 0;
         for (int i = 0; i < afterSteps; i++) {
@@ -27,9 +22,7 @@ public class Day11 {
         return countOfFlashes;
     }
 
-
-    @GetMapping("day11/part2/{filename}")
-    public int getWhenAllOctopiFlashSimultaneously(@PathVariable String filename) {
+    public int getWhenAllOctopiFlashSimultaneously(String filename) {
         initializeOctopi(filename);
         int countOfOctopi = octopi.length * octopi[0].length;
         int countOfFlashes = 0;

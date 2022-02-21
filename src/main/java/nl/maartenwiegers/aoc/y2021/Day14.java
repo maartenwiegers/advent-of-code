@@ -3,9 +3,6 @@ package nl.maartenwiegers.aoc.y2021;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +13,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@RestController
 @Slf4j
 public class Day14 {
     private static final String FILE_NAME = "input/y2021/14-%s.txt";
@@ -24,8 +20,7 @@ public class Day14 {
     private Map<String, Long> characterCounts = new HashMap<>();
     private String polymer;
 
-    @GetMapping("day14/score/{filename}/{steps}")
-    public long getScore(@PathVariable String filename, @PathVariable int steps) {
+    public long getScore(String filename, int steps) {
         initialize(filename);
         simulatePolymer(steps);
         return getScore();

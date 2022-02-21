@@ -3,23 +3,18 @@ package nl.maartenwiegers.aoc.y2021;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@RestController
 @Slf4j
 public class Day8 {
 
     private static final String FILE_NAME = "input/y2021/08-%s.txt";
 
-    @GetMapping("day8/part1/{dataset}")
-    public int getCountUsagesOfDigits(@PathVariable String dataset) {
+    public int getCountUsagesOfDigits(String dataset) {
         List<String> lines = FileService.getInputAsListString(String.format(FILE_NAME, dataset));
         AtomicInteger count = new AtomicInteger();
         lines.forEach(line -> {
@@ -40,8 +35,7 @@ public class Day8 {
         return count.get();
     }
 
-    @GetMapping("day8/part2/{dataset}")
-    public int getSumOfOutputs(@PathVariable String dataset) {
+    public int getSumOfOutputs(String dataset) {
         List<String> lines = FileService.getInputAsListString(String.format(FILE_NAME, dataset));
         int sum = 0;
         for (String line : lines) {

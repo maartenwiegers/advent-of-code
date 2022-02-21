@@ -3,9 +3,6 @@ package nl.maartenwiegers.aoc.y2021;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-@RestController
 @Slf4j
 public class Day12 {
 
@@ -24,8 +20,7 @@ public class Day12 {
     private static final String END = "end";
     private Map<String, Cave> caveMap;
 
-    @GetMapping("day12/{filename}/{allowVisitToSmallCaveTwice}")
-    public int getCountOfPaths(@PathVariable String filename, @PathVariable boolean allowVisitToSmallCaveTwice) {
+    public int getCountOfPaths(String filename, boolean allowVisitToSmallCaveTwice) {
         initializeCaveMap(filename);
         Cave start = caveMap.get(START);
         start.connections.forEach(cave -> cave.connections.removeIf(cave1 -> START.equals(cave1.name)));

@@ -1,16 +1,12 @@
 package nl.maartenwiegers.aoc.y2021;
 
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
 import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-@RestController
 public class Day7 {
 
     private static final String FILE_NAME = "input/y2021/07.txt";
@@ -18,8 +14,7 @@ public class Day7 {
     private int[] crabsAtDistance = new int[ARRAY_SIZE];
     private int[] fuelCostsPerDistance = new int[ARRAY_SIZE];
 
-    @GetMapping("day7/{part1}")
-    public int getFuelConsumption(@PathVariable boolean part1) {
+    public int getFuelConsumption(boolean part1) {
         crabsAtDistance = new int[ARRAY_SIZE];
         fuelCostsPerDistance = new int[ARRAY_SIZE];
         FileService.getCommaSeparatedInputAsListInteger(FILE_NAME)

@@ -2,29 +2,22 @@ package nl.maartenwiegers.aoc.y2020;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-@RestController
 @Slf4j
 public class Day1 {
 
     private static final String FILE_NAME = "input/y2020/01-%s.txt";
     private List<Integer> entries = new ArrayList<>();
 
-    @GetMapping("y2020/day1/part1/{filename}")
-    public long getMultiplicationOf2NumbersSum2020(@PathVariable String filename) {
+    public long getMultiplicationOf2NumbersSum2020(String filename) {
         entries = FileService.getInputAsListInteger(String.format(FILE_NAME, filename));
         return calculateMultiplicationOf2Entries();
     }
 
-    @GetMapping("y2020/day1/part2/{filename}")
-    public long getMultiplicationOf3NumbersSum2020(@PathVariable String filename) {
+    public long getMultiplicationOf3NumbersSum2020(String filename) {
         entries = FileService.getInputAsListInteger(String.format(FILE_NAME, filename));
         return calculateMultiplicationOf3Entries();
     }

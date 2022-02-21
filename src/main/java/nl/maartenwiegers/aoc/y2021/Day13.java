@@ -6,9 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.Coordinate;
 import nl.maartenwiegers.aoc.commons.Direction;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RestController
 @Slf4j
 public class Day13 {
 
@@ -24,16 +20,14 @@ public class Day13 {
     private List<FoldingInstruction> foldingInstructions;
     private HashSet<Coordinate> points;
 
-    @GetMapping("day13/{filename}/{numberOfFolds}")
-    public long getCountOfVisibleDots(@PathVariable String filename, @PathVariable int numberOfFolds) {
+    public long getCountOfVisibleDots(String filename, int numberOfFolds) {
         initializeCoordinates(filename);
         initializeFoldingInstructions(filename);
         simulateFolding(numberOfFolds);
         return getCountOfVisibleDots();
     }
 
-    @GetMapping("day13/{filename}/{numberOfFolds}/string")
-    public String getOutputAsString(@PathVariable String filename, @PathVariable int numberOfFolds) {
+    public String getOutputAsString(String filename, int numberOfFolds) {
         initializeCoordinates(filename);
         initializeFoldingInstructions(filename);
         simulateFolding(numberOfFolds);

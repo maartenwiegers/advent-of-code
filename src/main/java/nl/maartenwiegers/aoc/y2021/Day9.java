@@ -3,9 +3,6 @@ package nl.maartenwiegers.aoc.y2021;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.CoordinateWithDepth;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,8 +10,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-
-@RestController
 @Slf4j
 public class Day9 {
 
@@ -25,8 +20,7 @@ public class Day9 {
     private int[][] grid;
     private List<CoordinateWithDepth> lowPointsCoordinates;
 
-    @GetMapping("day9/part1/{filename}")
-    public int getSumOfRiskLevels(@PathVariable String filename) {
+    public int getSumOfRiskLevels(String filename) {
         setGrid(filename);
         setLowPoints();
         return lowPointsCoordinates.stream()
@@ -35,8 +29,7 @@ public class Day9 {
                 .sum() + lowPointsCoordinates.size();
     }
 
-    @GetMapping("day9/part2/{filename}")
-    public int getFactorOfThreeLargestBasins(@PathVariable String filename) {
+    public int getFactorOfThreeLargestBasins(String filename) {
         setGrid(filename);
         setLowPoints();
         return getBasinCalculation();

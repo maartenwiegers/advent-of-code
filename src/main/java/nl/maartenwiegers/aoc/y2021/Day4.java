@@ -5,14 +5,11 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
 @Slf4j
 public class Day4 {
 
@@ -24,7 +21,6 @@ public class Day4 {
     private int lastNumberDrawn;
     private BingoCard winningBingoCard;
 
-    @GetMapping("day4/part1/{gridSize}")
     public int solveBingoGetFirstWin(@PathVariable int gridSize) {
         log.warn("Playing part 1 with grid size of {} ", gridSize);
         this.gridSize = gridSize;
@@ -34,7 +30,6 @@ public class Day4 {
         return getPlayBingoResult(false);
     }
 
-    @GetMapping("day4/part2/{gridSize}")
     public int solveBingoGetLastWin(@PathVariable int gridSize) {
         log.warn("Playing part 2 with grid size of {} ", gridSize);
         this.gridSize = gridSize;

@@ -3,17 +3,14 @@ package nl.maartenwiegers.aoc.y2021;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import nl.maartenwiegers.aoc.commons.FileService;
 import nl.maartenwiegers.aoc.commons.Direction;
+import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@RestController
 @Slf4j
 public class Day5 {
 
@@ -22,7 +19,6 @@ public class Day5 {
     private int gridSize = 1000;
     private int[][] grid;
 
-    @GetMapping("day5/part1")
     public int getCountIntersectionsWithoutVertical(int gridSize) {
         this.gridSize = gridSize;
         setLines(true);
@@ -30,7 +26,6 @@ public class Day5 {
         return getCountIntersections();
     }
 
-    @GetMapping("day5/part2")
     public int getCountIntersectionsWithVertical(int gridSize) {
         this.gridSize = gridSize;
         setLines(false);

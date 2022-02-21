@@ -2,16 +2,12 @@ package nl.maartenwiegers.aoc.y2021;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@RestController
 @Slf4j
 public class Day10 {
 
@@ -21,8 +17,7 @@ public class Day10 {
     private static final Map<Character, Integer> POINTS = Map.of(')', 3, ']', 57, '}', 1197, '>', 25137);
     private static final Map<Character, Integer> POINTS_PART_2 = Map.of(')', 1, ']', 2, '}', 3, '>', 4);
 
-    @GetMapping("day10/part1/{filename}")
-    public int getScore(@PathVariable String filename) {
+    public int getScore(String filename) {
         return FileService.getInputAsListString(String.format(FILE_NAME, filename))
                 .stream()
                 .map(this::getCleanString)
@@ -31,8 +26,7 @@ public class Day10 {
                 .sum();
     }
 
-    @GetMapping("day10/part2/{filename}")
-    public long getAutocompleteScore(@PathVariable String filename) {
+    public long getAutocompleteScore(String filename) {
         List<Long> autocompleteScores = FileService.getInputAsListString(String.format(FILE_NAME, filename))
                 .stream()
                 .map(this::getCleanString)
