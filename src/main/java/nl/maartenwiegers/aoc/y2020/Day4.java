@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.Assert;
 
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -73,61 +74,52 @@ public class Day4 {
         }
 
         boolean isValidForPart2() {
-            if (byr == null) {
-                return false;
-            }
-            int birthYear = Integer.parseInt(byr);
-            if (birthYear < 1920 || birthYear > 2002) {
-                return false;
-            }
+            try {
+                Assert.notNull(byr, String.format("Passport %s not valid, byr null", this));
+                int birthYear = Integer.parseInt(byr);
+                Assert.isTrue(birthYear >= 1920 && birthYear <= 2002,
+                              String.format("Passport %s not valid, byr out-of-range", this));
 
-            if (iyr == null) {
-                return false;
-            }
-            int issueYear = Integer.parseInt(iyr);
-            if (issueYear < 2010 || issueYear > 2020) {
-                return false;
-            }
+                Assert.notNull(iyr, String.format("Passport %s not valid, iyr null", this));
+                int issueYear = Integer.parseInt(iyr);
+                Assert.isTrue(issueYear >= 2010 && issueYear <= 2020,
+                              String.format("Passport %s not valid, iyr out-of-range", this));
 
-            if (eyr == null) {
-                return false;
-            }
-            int expirationYear = Integer.parseInt(eyr);
-            if (expirationYear < 2020 || expirationYear > 2030) {
-                return false;
-            }
+                Assert.notNull(eyr, String.format("Passport %s not valid, eyr null", this));
+                int expirationYear = Integer.parseInt(eyr);
+                Assert.isTrue(expirationYear >= 2020 && expirationYear <= 2030,
+                              String.format("Passport %s not valid, eyr out-of-range", this));
 
-            if (StringUtils.endsWith(hgt, "cm")) {
+                Assert.isTrue(StringUtils.endsWith(hgt, "cm") || StringUtils.endsWith(hgt, "in"),
+                              String.format("Passport %s not valid, hgt incorrect unit", this));
+
                 int height = Integer.parseInt(hgt.replaceAll("\\D+", ""));
-                if (height < 150 || height > 193) {
-                    return false;
+                if (StringUtils.endsWith(hgt, "cm")) {
+                    Assert.isTrue(height >= 150 && height <= 193,
+                                  String.format("Passport %s not valid, hgt out-of-range", this));
+                } else if (StringUtils.endsWith(hgt, "in")) {
+                    Assert.isTrue(height >= 59 && height <= 76,
+                                  String.format("Passport %s not valid, hgt out-of-range", this));
                 }
-            } else if (StringUtils.endsWith(hgt, "in")) {
-                int height = Integer.parseInt(hgt.replaceAll("\\D+", ""));
-                if (height < 59 || height > 76) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
 
-            if(hcl == null) {
-                return false;
-            }
-            if (!hcl.startsWith("#")) {
-                return false;
-            }
-            if (!hcl.substring(1)
-                    .matches("[0-9][a-f]{6}")) {
-                return false;
-            }
+                Assert.notNull(hcl, String.format("Passport %s not valid, hcl null", this));
+                Assert.isTrue(hcl.startsWith("#"),
+                              String.format("Passport %s not valid, hcl does not start with #", this));
+                Assert.isTrue(hcl.substring(1)
+                                      .matches("[0-9a-f]{6}"),
+                              String.format("Passport %s not valid, hcl does not contain correct chars #", this));
 
-            if (!List.of("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
-                    .contains(ecl)) {
+                Assert.notNull(ecl, String.format("Passport %s not valid, ecl null", this));
+                Assert.isTrue(List.of("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
+                                      .contains(ecl), String.format("Passport %s not valid, ecl invalid value", this));
+
+                Assert.notNull(pid, String.format("Passport %s not valid, pid null", this));
+                Assert.isTrue(pid.matches("[0-9]{9}"), String.format("Passport %s not valid, pid invalid value", this));
+                return true;
+            } catch (IllegalArgumentException iae) {
+                log.error(iae.getMessage());
                 return false;
             }
-
-            return pid.matches("[0-9]{9}");
         }
     }
 }

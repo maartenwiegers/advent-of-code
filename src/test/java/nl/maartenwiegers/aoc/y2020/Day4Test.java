@@ -20,6 +20,6 @@ class Day4Test {
 
     private static Stream<Arguments> getArguments() {
         return Stream.of(Arguments.of("example", 2, false), Arguments.of("puzzleinput", 250, false),
-                         Arguments.of("puzzleinput", 250, true));
+                         Arguments.of("puzzleinput", 158, true));
     }
 }
