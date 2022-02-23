@@ -20,8 +20,7 @@ public class Day6 {
     public long getSumOfCountOfAnswers(String filename) {
         initializeAnswers(filename);
         AtomicLong count = new AtomicLong();
-        answers.forEach(answer -> count.getAndAdd(answer.codePoints()
-                                                          .mapToObj(c -> String.valueOf((char) c))
+        answers.forEach(answer -> count.getAndAdd(answer.chars()
                                                           .distinct()
                                                           .count()));
         return count.get();
