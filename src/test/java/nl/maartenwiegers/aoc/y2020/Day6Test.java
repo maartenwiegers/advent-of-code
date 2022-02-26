@@ -13,12 +13,22 @@ class Day6Test {
     private final Day6 day6 = new Day6();
 
     @ParameterizedTest
-    @MethodSource("getArguments")
-    void shouldGetCorrectAnswers(long expected, String filename) {
+    @MethodSource("getPart1Arguments")
+    void shouldGetCorrectAnswerPart1(long expected, String filename) {
         assertEquals(expected, day6.getSumOfCountOfAnswers(filename));
     }
 
-    private static Stream<Arguments> getArguments() {
+    @ParameterizedTest
+    @MethodSource("getPart2Arguments")
+    void shouldGetCorrectAnswerPart2(long expected, String filename) {
+        assertEquals(expected, day6.getSumOfCountOfYesAnswers(filename));
+    }
+
+    private static Stream<Arguments> getPart1Arguments() {
         return Stream.of(Arguments.of(11, "example"), Arguments.of(6686, "puzzleinput"));
+    }
+
+    private static Stream<Arguments> getPart2Arguments() {
+        return Stream.of(Arguments.of(6, "example"), Arguments.of(3476, "puzzleinput"));
     }
 }
