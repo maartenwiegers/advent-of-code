@@ -8,7 +8,6 @@ import nl.maartenwiegers.aoc.commons.FileService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,36 +23,23 @@ public class Day4 {
     public long getCountValidPassports(String filename, boolean isPart2) {
         initializePassports(filename);
         if (isPart2) {
-            return passports.stream()
-                    .filter(Passport::isValidForPart2)
-                    .count();
+            return passports.stream().filter(Passport::isValidForPart2).count();
         }
-        return passports.stream()
-                .filter(Passport::isValid)
-                .count();
+        return passports.stream().filter(Passport::isValid).count();
     }
 
     @SneakyThrows
     private void initializePassports(String filename) {
-        String input = Files.readString(FileService.getPath(String.format(FILE_NAME, filename)));
-        Arrays.stream(StringUtils.splitByWholeSeparatorPreserveAllTokens(input, "\r\n\r\n"))
-                .forEach(line -> {
-                    String[] fields = StringUtils.split(line);
-                    Map<String, String> fieldsMap = new HashMap<>();
-                    Arrays.stream(fields)
-                            .forEach(field -> fieldsMap.put(StringUtils.split(field, ":")[0],
-                                                            StringUtils.split(field, ":")[1]));
-                    passports.add(Passport.builder()
-                                          .byr(fieldsMap.get("byr"))
-                                          .iyr(fieldsMap.get("iyr"))
-                                          .eyr(fieldsMap.get("eyr"))
-                                          .hgt(fieldsMap.get("hgt"))
-                                          .hcl(fieldsMap.get("hcl"))
-                                          .ecl(fieldsMap.get("ecl"))
-                                          .pid(fieldsMap.get("pid"))
-                                          .cid(fieldsMap.get("cid"))
-                                          .build());
-                });
+        FileService.getMultiLineInputAsListString(String.format(FILE_NAME, filename)).forEach(line -> {
+            String[] fields = StringUtils.split(line);
+            Map<String, String> fieldsMap = new HashMap<>();
+            Arrays.stream(fields).forEach(
+                    field -> fieldsMap.put(StringUtils.split(field, ":")[0], StringUtils.split(field, ":")[1]));
+            passports.add(
+                    Passport.builder().byr(fieldsMap.get("byr")).iyr(fieldsMap.get("iyr")).eyr(fieldsMap.get("eyr"))
+                            .hgt(fieldsMap.get("hgt")).hcl(fieldsMap.get("hcl")).ecl(fieldsMap.get("ecl"))
+                            .pid(fieldsMap.get("pid")).cid(fieldsMap.get("cid")).build());
+        });
         log.info("Passports initialized: {}", passports);
     }
 
@@ -105,13 +91,12 @@ public class Day4 {
                 Assert.notNull(hcl, String.format("Passport %s not valid, hcl null", this));
                 Assert.isTrue(hcl.startsWith("#"),
                               String.format("Passport %s not valid, hcl does not start with #", this));
-                Assert.isTrue(hcl.substring(1)
-                                      .matches("[0-9a-f]{6}"),
+                Assert.isTrue(hcl.substring(1).matches("[0-9a-f]{6}"),
                               String.format("Passport %s not valid, hcl does not contain correct chars #", this));
 
                 Assert.notNull(ecl, String.format("Passport %s not valid, ecl null", this));
-                Assert.isTrue(List.of("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
-                                      .contains(ecl), String.format("Passport %s not valid, ecl invalid value", this));
+                Assert.isTrue(List.of("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(ecl),
+                              String.format("Passport %s not valid, ecl invalid value", this));
 
                 Assert.notNull(pid, String.format("Passport %s not valid, pid null", this));
                 Assert.isTrue(pid.matches("[0-9]{9}"), String.format("Passport %s not valid, pid invalid value", this));

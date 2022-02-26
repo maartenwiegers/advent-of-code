@@ -2,6 +2,7 @@ package nl.maartenwiegers.aoc.commons;
 
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -21,30 +22,23 @@ public class FileService {
 
     @SneakyThrows
     public static List<String> getInputAsListString(@NonNull String filename) {
-        return Files.readAllLines(FileService.getPath(filename))
-                .stream()
-                .toList();
+        return Files.readAllLines(FileService.getPath(filename)).stream().toList();
     }
 
     @SneakyThrows
     public static List<Integer> getInputAsListInteger(@NonNull String filename) {
-        return Files.readAllLines(FileService.getPath(filename))
-                .stream()
-                .map(Integer::valueOf)
-                .toList();
+        return Files.readAllLines(FileService.getPath(filename)).stream().map(Integer::valueOf).toList();
     }
 
     @SneakyThrows
     public static List<Integer> getCommaSeparatedInputAsListInteger(@NonNull String filename) {
-        return Arrays.stream(Files.readString(FileService.getPath(filename)).split(","))
-                .map(Integer::valueOf)
-                .toList();
+        return Arrays.stream(Files.readString(FileService.getPath(filename)).split(",")).map(Integer::valueOf).toList();
     }
 
     @SneakyThrows
-    public static List<Long> getCommaSeparatedInputAsListLong(@NonNull String filename) {
-        return Arrays.stream(Files.readString(FileService.getPath(filename)).split(","))
-                .map(Long::valueOf)
+    public static List<String> getMultiLineInputAsListString(@NonNull String filename) {
+        return Arrays.stream(
+                        StringUtils.splitByWholeSeparatorPreserveAllTokens(Files.readString(getPath(filename)), "\r\n\r\n"))
                 .toList();
     }
 }

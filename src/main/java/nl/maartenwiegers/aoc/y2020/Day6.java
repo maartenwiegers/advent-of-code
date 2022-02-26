@@ -3,11 +3,8 @@ package nl.maartenwiegers.aoc.y2020;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.maartenwiegers.aoc.commons.FileService;
-import org.apache.commons.lang3.StringUtils;
 
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -20,16 +17,13 @@ public class Day6 {
     public long getSumOfCountOfAnswers(String filename) {
         initializeAnswers(filename);
         AtomicLong count = new AtomicLong();
-        answers.forEach(answer -> count.getAndAdd(answer.chars()
-                                                          .distinct()
-                                                          .count()));
+        answers.forEach(answer -> count.getAndAdd(answer.chars().distinct().count()));
         return count.get();
     }
 
     @SneakyThrows
     private void initializeAnswers(String filename) {
-        String input = Files.readString(FileService.getPath(String.format(FILE_NAME, filename)));
-        Arrays.stream(StringUtils.splitByWholeSeparatorPreserveAllTokens(input, "\r\n\r\n"))
+        FileService.getMultiLineInputAsListString(String.format(FILE_NAME, filename))
                 .forEach(line -> answers.add(line.replace("\r\n", "")));
         log.info("Answers initialized: {}", answers);
     }
